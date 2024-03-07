@@ -38,12 +38,15 @@
             ],
             "styles": [
               "src/styles.css",
+              "node_modules/filepond/dist/filepond.min.css",
               "node_modules/tailwindcss/base.css",
               "node_modules/tailwindcss/components.css",
               "node_modules/tailwindcss/utilities.css"
             ],
 
-            "scripts": [],
+            "scripts": [
+              "node_modules/filepond/dist/filepond.min.js"
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
