@@ -8,6 +8,7 @@ import { AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
 import * as FilePond from 'filepond';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-define',
@@ -17,16 +18,17 @@ import * as FilePond from 'filepond';
 
 
 
-export class DefineComponent implements OnInit {
-
+export class DefineComponent implements AfterViewInit {
   @ViewChild('filepond', { static: false }) filepond!: ElementRef;
 
-  ngOnInit() {
-    initFlowbite();
+  public imageUrl: string | undefined;
+  constructor(private http: HttpClient) {}
+  ngAfterViewInit() {
+    initFlowbite()
 
     const pondOptions = {
       allowReorder: true,
-      maxFileSize: '3MB',
+      maxFileSize: '5MB',
       maxFiles: 3
     };
 
@@ -37,6 +39,31 @@ export class DefineComponent implements OnInit {
       } else {
         console.log('File Uploaded', file);
       }
+    });
+  }
+
+
+  formData = { question: '', note: '', type: 'true'};
+
+  submitForm(): void {
+    const formData = new FormData();
+    formData.append('question', this.formData.question);
+    formData.append('note', this.formData.note);
+    formData.append('type', this.formData.type);
+
+    if (this.filepond.nativeElement.files.length > 0) {
+      formData.append('file', this.filepond.nativeElement.files[0]);
+    } else {
+      console.log('No file selected');
+    }
+    console.log(formData);
+
+    this.http.post('http://localhost:3000/submit/question', formData).subscribe((response) => {
+      console.log(response);
+      alert('Form submitted successfully');
+    }, (error) => {
+      console.error(error);
+      alert('Failed to submit form');
     });
   }
 }
