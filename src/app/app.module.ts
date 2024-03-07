@@ -6,7 +6,7 @@ import { NgModel } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule } from '@tinymce/tinymce-angular'
-
+import { initFlowbite } from 'flowbite';
 
 
 import { AppRoutingModule } from './app-routing.module';
