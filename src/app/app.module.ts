@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { NgModel } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,7 +29,7 @@ import { ComponentsComponent } from './components/components.component';
     NavbarComponent,
     FooterComponent,
     LayoutsComponent,
-    ComponentsComponent
+    ComponentsComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,8 +37,8 @@ import { ComponentsComponent } from './components/components.component';
     CommonModule,
     RouterLink,
     RouterOutlet,
-    // NgModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
 
   ],
   providers: [

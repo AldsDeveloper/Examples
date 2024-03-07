@@ -1,1 +1,36 @@
-<p>exams works!</p>
+<main class="flex flex-col items-center justify-center min-h-screen bg-violet-100">
+  <section class="flex flex-col justify-center w-full max-w-4xl px-4 mx-auto">
+    <div class="py-8 bg-white rounded-lg shadow-2xl">
+      <div class="px-4 text-center">
+        <div class="" >
+          <label class="inline-flex items-center mb-5 cursor-pointer">
+            <input type="checkbox" value="" class="sr-only peer">
+            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <span class="text-sm font-medium text-gray-900 ms-3 dark:text-gray-300">Code editor</span>
+          </label>
+        </div>
+        <div class="mt-12 text-center">
+          <p class="mb-3 text-2xl font-semibold leading-normal text-blueGray-700">Quiz : {{ currentQuestionIndex + 1 }}</p>
+          <div [innerHTML]="questions[currentQuestionIndex].question" class="centered-content"></div>
+        </div>
+      </div>
+      <div class="mt-6 border-t border-blueGray-200">
+        <div class="flex flex-wrap justify-center py-4">
+          <div class="w-full px-4 lg:w-9/12">
+            <p *ngIf="!questions[currentQuestionIndex].answer.trim() && (isSubmitted || currentQuestionIndex === unansweredIndex)" class="mb-2 ml-2 text-left text-red-500 text text-1xl">*จำเป็นต้องตอบคำถามข้อนี้</p>
+            <div class="w-full px-4 mb-4 border border-gray-200 rounded-lg ">
+              <div class="py-2 rounded-t-lg">
+                <textarea id="answer-{{currentQuestionIndex}}"  name="answer-{{currentQuestionIndex}}" [(ngModel)]="questions[currentQuestionIndex].answer" [ngModelOptions]="{standalone: true}" rows="7" class="w-full px-4 py-2 text-sm text-gray-900 bg-white border-0 focus:ring-0" placeholder="Write an answer here..." required></textarea>
+              </div>
+            </div>
+            <div class="flex justify-center space-x-2">
+              <a *ngIf="!isSubmitted && currentQuestionIndex > 0" (click)="goToPreviousQuestion()" class="px-6 py-3 mb-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-red-600 rounded shadow outline-none active:bg-red-700 hover:shadow-md focus:outline-none sm:mr-2" type="button">Back</a>
+              <a *ngIf="!isSubmitted && currentQuestionIndex < questions.length - 1" (click)="goToNextQuestion()" class="px-6 py-3 mb-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-red-600 rounded shadow outline-none active:bg-red-700 hover:shadow-md focus:outline-none sm:mr-2" type="button">Next</a>
+              <a *ngIf="currentQuestionIndex === questions.length - 1 && !isSubmitted" (click)="submitForm()" class="px-6 py-3 mb-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-green-500 rounded shadow outline-none active:bg-red-700 hover:shadow-md focus:outline-none sm:mr-2" type="button">Submit</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
