@@ -37,8 +37,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css",
+              "node_modules/tailwindcss/base.css",
+              "node_modules/tailwindcss/components.css",
+              "node_modules/tailwindcss/utilities.css"
             ],
+
             "scripts": [],
             "server": "src/main.server.ts",
             "prerender": true,
@@ -109,5 +113,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "751b4d15-6137-428a-a669-d63703d99a58"
   }
 }

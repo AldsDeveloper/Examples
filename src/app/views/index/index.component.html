@@ -1,0 +1,18 @@
+<!-- <app-index-navbar></app-index-navbar> -->
+<section class="relative flex items-center h-screen pt-16 header max-h-860-px ">
+  <div class="container flex flex-wrap items-center mx-auto">
+    <div class="w-full px-4 md:w-8/12 lg:w-6/12 xl:w-6/12">
+      <div class="pt-32 sm:pt-0">
+        <h2 class="text-4xl font-semibold text-blueGray-600">The exam center for candidate.</h2>
+        <p class="mt-4 text-lg leading-relaxed text-blueGray-500">“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”</p>
+        <div class="mt-5">
+          <input type="text" [(ngModel)]="userId"  placeholder="Enter your ID or Name here" class="relative px-3 py-3 pt-5 pl-5 text-sm bg-white border-0 rounded shadow outline-none placeholder-blueGray-300 text-blueGray-600 focus:outline-none focus:ring">
+        </div>
+        <div class="flex flex-row flex-wrap justify-start mt-12 justify-items-start">
+          <a (click)="getStarted()" class="px-6 py-4 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-purple-600 rounded shadow outline-none get-started active:bg-purple-800 hover:bg-purple-700 focus:outline-none sm:mr-2">Get started</a>
+          <a routerLink="/define" class="px-6 py-4 mb-1 ml-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-green-600 rounded shadow outline-none github-star active:bg-green-800 hover:bg-green-700 focus:outline-none sm:mr-2">Define Exams</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
