@@ -5,6 +5,8 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 import { NgModel } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { EditorModule } from '@tinymce/tinymce-angular'
+
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -39,6 +41,7 @@ import { ComponentsComponent } from './components/components.component';
     RouterOutlet,
     FormsModule,
     HttpClientModule,
+    EditorModule,
 
   ],
   providers: [

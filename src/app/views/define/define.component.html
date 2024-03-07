@@ -1,1 +1,41 @@
-<p>define works!</p>
+<main class="flex flex-col items-center justify-center min-h-screen bg-violet-100">
+  <section class="flex flex-col justify-center w-full max-w-6xl px-4 mx-auto">
+    <div class="py-8 bg-white rounded-lg shadow-2xl">
+      <div class="px-4 text-center">
+        <p class="mb-3 text-2xl font-semibold leading-normal text-blueGray-700">Set your question</p>
+        <p class="px-4 py-2 mb-3 text-1xl text-blueGray-700">Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi placeat magni fugit fugiat obcaecati laudantium illo alias eos eius iusto!</p>
+      </div>
+      <div class="mt-6 border-t border-blueGray-200">
+        <div class="flex flex-wrap justify-center py-4">
+          <div class="w-full px-4 lg:w-9/12">
+            <div class="px-4 py-5 sm:py-6">
+              <form class="flex flex-col items-center justify-center" (submit)="submitForm()">
+                <div *ngFor="let question of questions; let i = index" class="w-full mb-5">
+                  <p class="mb-1 ml-2 text-left text-1xl text-blueGray-700">Question {{ i + 1 }}:</p>
+                  <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <div class="px-4 py-2 bg-white rounded-t-lg">
+                      <editor [init]="editorConfig"  [ngModelOptions]="{standalone: true}" [(ngModel)]="question.content" name="question{{i}}" apiKey="galongsqx44kg1gkvjxm2viq90d7ywtw4ak31wfduj7eodf3"></editor>
+                    </div>
+                    <div class="flex items-center justify-end px-4 py-2 border-t">
+                      <div class="flex items-center me-4">
+                        <input id="check-code{{i}}" type="checkbox" [ngModel]="question.isCode" (change)="onCheckboxChange($event, i)" class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="check-code{{i}}" class="text-sm font-medium text-gray-900 ms-2 dark:text-gray-300">คำตอบต้องเป็น Code</label>
+                      </div>
+                      <button class="px-4 py-2 ml-2 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-red-500 rounded shadow outline-none active:bg-red-700 hover:shadow-md focus:outline-none" type="button" (click)="deleteQuestion(i)">Delete</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex justify-end w-full py-10">
+                  <button type="button" class="px-4 py-2 mb-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-purple-500 rounded shadow outline-none active:bg-red-700 hover:shadow-md focus:outline-none sm:mr-2 md:px-6 md:py-2" (click)="addQuestion()">Add Question</button>
+                  <button type="submit" class="px-4 py-2 mb-1 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-red-500 rounded shadow outline-none active:bg-red-700 hover:shadow-md focus:outline-none sm:mr-2 md:px-6 md:py-2">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- apiKey="galongsqx44kg1gkvjxm2viq90d7ywtw4ak31wfduj7eodf3" -->
