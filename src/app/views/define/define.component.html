@@ -62,31 +62,34 @@
           <button data-modal-target="create-modal" data-modal-toggle="create-modal" class="block text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center " type="button">Created Question</button>
       </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table class="w-full text-sm text-left text-gray-400 rtl:text-right">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="col" class="px-6 py-3">Question</th>
-                <th scope="col" class="px-6 py-3">Image</th>
-                <th scope="col" class="px-6 py-3">Note</th>
-                <th scope="col" class="px-6 py-3">Created</th>
-                <th scope="col" class="px-6 py-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="bg-white border-b hover:bg-gray-100" *ngFor="let question of questions">
-                <td class="px-6 py-4">{{ question.question }}</td>
-                <td class="px-6 py-4">
-                  <a href="{{ question.path }}" class="block font-medium text-red-600 hover:underline">Images</a>
-                </td>
-                <td class="px-6 py-4">{{ question.note }}</td>
-                <td class="px-6 py-4">{{ question.created_at }}</td>
-                <td class="flex justify-center px-6 py-4">
-                  <button (click)="fetchQuestionById(question.id)" data-modal-target="edit-modal" data-modal-toggle="edit-modal" class="block text-blue-600 font-medium  hover:underline px-3 py-2.5 text-center " type="button">Edit</button>
-                  <button  class="block text-red-600 font-medium  hover:underline px-3 py-2.5 text-center " type="button">Delete</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+<!-- app.component.html -->
+<table class="w-full text-sm text-left text-gray-400 rtl:text-right">
+  <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+    <tr>
+      <th scope="col" class="px-6 py-3">Id</th>
+      <th scope="col" class="px-6 py-3">Question</th>
+      <th scope="col" class="px-6 py-3">Image</th>
+      <th scope="col" class="px-6 py-3">Description</th>
+      <th scope="col" class="px-6 py-3">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="bg-white border-b hover:bg-gray-100" *ngFor="let question of questions">
+      <td class="px-6 py-4">{{ question.id }}</td>
+      <td class="px-6 py-4">{{ question.question }}</td>
+      <td class="px-6 py-4">
+        <a href="{{ question.path }}" class="block font-medium text-red-600 hover:underline">Images</a>
+      </td>
+      <td class="px-6 py-4">{{ question.note }}</td>
+      <td class="px-6 py-4">{{ question.created_at }}</td>
+      <td class="flex justify-center px-6 py-4">
+        <button (click)="fetchQuestionById(question.id)" data-modal-target="edit-modal" data-modal-toggle="edit-modal" class="block text-blue-600 font-medium  hover:underline px-3 py-2.5 text-center " type="button">Edit</button>
+        <button class="block text-red-600 font-medium  hover:underline px-3 py-2.5 text-center " type="button">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
         </div>
       </div>
   </section>

@@ -11,6 +11,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 
 
+import '@angular/platform-server/init';
+
 
 import * as FilePond from 'filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
@@ -84,6 +86,7 @@ export class DefineComponent implements AfterViewInit {
 
   fetchQuestion() {
     this.http.post('http://localhost:3000/fetch/questions', {}).subscribe((response: any) => {
+
       console.log('Questions response:', response);
     }, error => {
       console.error('Error fetch question:', error);

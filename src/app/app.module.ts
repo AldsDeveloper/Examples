@@ -6,7 +6,6 @@ import { NgModel } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule } from '@tinymce/tinymce-angular'
-import { initFlowbite } from 'flowbite';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,8 +20,7 @@ import { LayoutsComponent } from './layouts/layouts.component';
 import { ComponentsComponent } from './components/components.component';
 import * as FilePond from 'filepond';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
-
-
+import { HttpClient } from '@angular/common/http';
 
 
 @NgModule({
@@ -46,7 +44,8 @@ import { FilePondModule, registerPlugin } from 'ngx-filepond';
     FormsModule,
     HttpClientModule,
     EditorModule,
-    FilePondModule
+    FilePondModule,
+    HttpClientModule,
 
   ],
   providers: [
