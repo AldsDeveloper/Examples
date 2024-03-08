@@ -34,7 +34,54 @@ export class DefineComponent implements AfterViewInit {
   uploadedFile: File | null = null;
 
   public imageUrl: string | undefined;
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit(): void { this.fetchQuestion() }
+
+  questions: any[] = [];
+
+  fetchQuestion() {
+    this.http.post('http://localhost:3000/fetch/questions', {}).subscribe((response: any) => {
+      console.log('Questions response:', response);
+      this.questions = response;
+    }, error => {
+      console.error('Error fetch question:', error);
+      alert('Error qetch question!');
+    });
+  }
+
+  currentModal: string | null = null;
+
+  openModal(modalId: string): void {
+    if (this.currentModal === null) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('hidden');
+        this.currentModal = modalId;
+      }
+    }
+  }
+
+  closeModal(modalId: string): void {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.add('hidden');
+      this.currentModal = null;
+    }
+  }
+
+  fetchQuestionById(id: number): void {
+    this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
+      this.formData = response;
+      this.openModal('edit-modal');
+    }, error => {
+      console.error('Error fetching question:', error);
+      alert('Error fetching question!');
+    });
+  }
+
+
   ngAfterViewInit() {
     initFlowbite()
 
@@ -56,7 +103,7 @@ export class DefineComponent implements AfterViewInit {
 
   }
 
-  formData = { question: '', note: '', type: 'true'};
+  formData = { question: '', note: '', type: 'true' };
 
   submitForm(): void {
     const formData = new FormData();
@@ -70,6 +117,11 @@ export class DefineComponent implements AfterViewInit {
       console.log('No file selected');
       return;
     }
+
+
+
+
+
 
     this.http.post<any>('http://localhost:3000/submit/question', formData).subscribe((response) => {
       console.log(response);
