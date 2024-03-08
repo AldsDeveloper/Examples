@@ -29,7 +29,10 @@ FilePond.registerPlugin(FilePondPluginImagePreview);
 
 
 export class DefineComponent implements AfterViewInit {
+
   @ViewChild('filepond', { static: false }) filepond: any;
+
+  @ViewChild('filepondedit', { static: false }) filepondedit: any;
 
   uploadedFile: File | null = null;
 
@@ -37,9 +40,12 @@ export class DefineComponent implements AfterViewInit {
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit(): void { this.fetchQuestion() }
+  formData = { question: '', note: '', type: 'true' };
 
   questions: any[] = [];
+  
+  ngOnInit(): void { this.fetchQuestion() }
+
 
   fetchQuestion() {
     this.http.post('http://localhost:3000/fetch/questions', {}).subscribe((response: any) => {
@@ -91,19 +97,29 @@ export class DefineComponent implements AfterViewInit {
       maxFiles: 3
     };
 
-    const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
-    pond.on('addfile', (error, file) => {
-      if (error) {
-        console.log('File Upload Error: ', error);
-      } else {
-        console.log('File Uploaded', file);
-        this.uploadedFile = file.file;
-      }
-    });
+    setTimeout(() => {
+        const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
+        pond.on('addfile', (error, file) => {
+            if (error) {
+                console.log('File Upload Error: ', error);
+            } else {
+                console.log('File Uploaded', file);
+                this.uploadedFile = file.file;
+            }
+        });
 
-  }
+        const pondEdit = FilePond.create(this.filepondedit.nativeElement, pondOptions);
+        pondEdit.on('addfile', (error, file) => {
+            if (error) {
+                console.log('File Upload Error: ', error);
+            } else {
+                console.log('File Uploaded', file);
+                this.uploadedFile = file.file;
+            }
+        });
+    }, 0);
+}
 
-  formData = { question: '', note: '', type: 'true' };
 
   submitForm(): void {
     const formData = new FormData();
@@ -117,12 +133,6 @@ export class DefineComponent implements AfterViewInit {
       console.log('No file selected');
       return;
     }
-
-
-
-
-
-
     this.http.post<any>('http://localhost:3000/submit/question', formData).subscribe((response) => {
       console.log(response);
       alert('Form submitted successfully');
