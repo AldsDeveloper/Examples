@@ -19,6 +19,10 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LayoutsComponent } from './layouts/layouts.component';
 import { ComponentsComponent } from './components/components.component';
+import * as FilePond from 'filepond';
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+
+
 
 
 @NgModule({
@@ -42,6 +46,7 @@ import { ComponentsComponent } from './components/components.component';
     FormsModule,
     HttpClientModule,
     EditorModule,
+    FilePondModule,
 
   ],
   providers: [

@@ -11,7 +11,10 @@ const storage = multer.diskStorage({
     cb(null, 'src/assets/public/uploads');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
+    const uniqueId = Math.random().toString(36).substr(2, 15);
+    const fileExtension = file.originalname.split('.').pop();
+    const newFilename = `${uniqueId}.${fileExtension}`;
+    cb(null, newFilename);
   }
 });
 const upload = multer({ storage: storage , limits: { fileSize: 3 * 1024 * 1024 }});
@@ -36,8 +39,8 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
   const imagePath = req.file ? req.file.path : null;
 
   console.log(JSON.stringify(req.body));
-
-
+  console.log(req.file);
+  // return
 
   const insertQuery = 'INSERT INTO questions (question, note, type, path) VALUES (?, ?, ?, ?)';
   const insertResult = await new Promise((resolve, reject) => {

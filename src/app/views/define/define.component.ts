@@ -1,14 +1,24 @@
 import { Component, OnInit, ViewChild, ElementRef,NgModule   } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive,ActivatedRoute } from '@angular/router';
 import { EditorComponent } from '@tinymce/tinymce-angular';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient ,HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
-import * as FilePond from 'filepond';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+
+
+
+import * as FilePond from 'filepond';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import { registerPlugin } from 'filepond';
+import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+FilePond.registerPlugin(FilePondPluginImageCrop);
+FilePond.registerPlugin(FilePondPluginImagePreview);
 
 @Component({
   selector: 'app-define',
@@ -19,7 +29,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 export class DefineComponent implements AfterViewInit {
-  @ViewChild('filepond', { static: false }) filepond!: ElementRef;
+  @ViewChild('filepond', { static: false }) filepond: any;
+
+  uploadedFile: File | null = null;
 
   public imageUrl: string | undefined;
   constructor(private http: HttpClient) {}
@@ -38,10 +50,11 @@ export class DefineComponent implements AfterViewInit {
         console.log('File Upload Error: ', error);
       } else {
         console.log('File Uploaded', file);
+        this.uploadedFile = file.file;
       }
     });
-  }
 
+  }
 
   formData = { question: '', note: '', type: 'true'};
 
@@ -51,14 +64,14 @@ export class DefineComponent implements AfterViewInit {
     formData.append('note', this.formData.note);
     formData.append('type', this.formData.type);
 
-    if (this.filepond.nativeElement.files.length > 0) {
-      formData.append('file', this.filepond.nativeElement.files[0]);
+    if (this.uploadedFile) {
+      formData.append('file', this.uploadedFile);
     } else {
       console.log('No file selected');
+      return;
     }
-    console.log(formData);
 
-    this.http.post('http://localhost:3000/submit/question', formData).subscribe((response) => {
+    this.http.post<any>('http://localhost:3000/submit/question', formData).subscribe((response) => {
       console.log(response);
       alert('Form submitted successfully');
     }, (error) => {
@@ -66,6 +79,7 @@ export class DefineComponent implements AfterViewInit {
       alert('Failed to submit form');
     });
   }
+
 }
 
 
