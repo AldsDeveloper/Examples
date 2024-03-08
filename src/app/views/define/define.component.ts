@@ -43,7 +43,10 @@ export class DefineComponent implements AfterViewInit {
   formData = { question: '', note: '', type: 'true' };
 
   questions: any[] = [];
-  
+
+  pondFiles = [''];
+
+
   ngOnInit(): void { this.fetchQuestion() }
 
 
@@ -77,15 +80,36 @@ export class DefineComponent implements AfterViewInit {
     }
   }
 
+  pondEditFile: string[] = ['assets/public/uploads/61j40y200jg.png'];
+
+
   fetchQuestionById(id: number): void {
     this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
-      this.formData = response;
-      this.openModal('edit-modal');
+        this.fillEditModal(response);
     }, error => {
-      console.error('Error fetching question:', error);
-      alert('Error fetching question!');
+        console.error('Error fetching question:', error);
+        alert('Error fetching question!');
     });
-  }
+}
+
+
+
+fillEditModal(formData: any): void {
+  this.formData = formData;
+  console.log(formData.path);
+  this.pondFiles = [formData.path];
+  this.openModal('edit-modal');
+}
+
+
+
+pondHandleInit() {
+  console.log('FilePond has initialised', this.filepondedit);
+}
+
+pondHandleAddFile(event: any) {
+  console.log('A file was added', event.file.filename);
+}
 
 
   ngAfterViewInit() {
