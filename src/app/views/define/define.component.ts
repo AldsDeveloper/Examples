@@ -46,9 +46,9 @@ export class DefineComponent implements AfterViewInit {
 
   pondFiles = [''];
 
+  currentModal: string | null = null;
 
   ngOnInit(): void { this.fetchQuestion() }
-
 
   fetchQuestion() {
     this.http.post('http://localhost:3000/fetch/questions', {}).subscribe((response: any) => {
@@ -59,8 +59,6 @@ export class DefineComponent implements AfterViewInit {
       alert('Error qetch question!');
     });
   }
-
-  currentModal: string | null = null;
 
   openModal(modalId: string): void {
     if (this.currentModal === null) {
@@ -80,9 +78,6 @@ export class DefineComponent implements AfterViewInit {
     }
   }
 
-  pondEditFile: string[] = ['assets/public/uploads/61j40y200jg.png'];
-
-
   fetchQuestionById(id: number): void {
     this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
         this.fillEditModal(response);
@@ -94,56 +89,52 @@ export class DefineComponent implements AfterViewInit {
 
 
 
-fillEditModal(formData: any): void {
-  this.formData = formData;
-  console.log(formData.path);
-  this.pondFiles = [formData.path];
-  this.openModal('edit-modal');
-}
+  fillEditModal(formData: any): void {
+    this.formData = formData;
+    console.log(formData.path);
+    this.pondFiles = [formData.path];
+    this.openModal('edit-modal');
+  }
 
+  pondHandleInit() {
+    console.log('FilePond has initialised', this.filepondedit);
+  }
 
-
-pondHandleInit() {
-  console.log('FilePond has initialised', this.filepondedit);
-}
-
-pondHandleAddFile(event: any) {
-  console.log('A file was added', event.file.filename);
-}
-
+  pondHandleAddFile(event: any) {
+    console.log('A file was added', event.file.filename);
+  }
 
   ngAfterViewInit() {
-    initFlowbite()
+      initFlowbite()
 
-    const pondOptions = {
-      allowReorder: true,
-      maxFileSize: '5MB',
-      maxFiles: 3
-    };
+      const pondOptions = {
+        allowReorder: true,
+        maxFileSize: '5MB',
+        maxFiles: 3
+      };
 
-    setTimeout(() => {
-        const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
-        pond.on('addfile', (error, file) => {
-            if (error) {
-                console.log('File Upload Error: ', error);
-            } else {
-                console.log('File Uploaded', file);
-                this.uploadedFile = file.file;
-            }
-        });
+      setTimeout(() => {
+          const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
+          pond.on('addfile', (error, file) => {
+              if (error) {
+                  console.log('File Upload Error: ', error);
+              } else {
+                  console.log('File Uploaded', file);
+                  this.uploadedFile = file.file;
+              }
+          });
 
-        const pondEdit = FilePond.create(this.filepondedit.nativeElement, pondOptions);
-        pondEdit.on('addfile', (error, file) => {
-            if (error) {
-                console.log('File Upload Error: ', error);
-            } else {
-                console.log('File Uploaded', file);
-                this.uploadedFile = file.file;
-            }
-        });
-    }, 0);
-}
-
+          const pondEdit = FilePond.create(this.filepondedit.nativeElement, pondOptions);
+          pondEdit.on('addfile', (error, file) => {
+              if (error) {
+                  console.log('File Upload Error: ', error);
+              } else {
+                  console.log('File Uploaded', file);
+                  this.uploadedFile = file.file;
+              }
+          });
+      }, 0);
+  }
 
   submitForm(): void {
     const formData = new FormData();
