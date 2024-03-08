@@ -46,7 +46,7 @@ import { FilePondModule, registerPlugin } from 'ngx-filepond';
     FormsModule,
     HttpClientModule,
     EditorModule,
-    FilePondModule,
+    FilePondModule
 
   ],
   providers: [

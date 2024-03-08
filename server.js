@@ -5,6 +5,7 @@ const app = express();
 const port = 3000;
 const mysql = require('mysql');
 const cors = require('cors');
+const { log } = require('console');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -38,9 +39,9 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
   const { question, note, type } = req.body;
   const imagePath = `assets/public/uploads/${req.file.filename}`;
 
-  console.log(imagePath);
-  console.log(JSON.stringify(req.body));
-  console.log(req.file);
+  // console.log(imagePath);
+  // console.log(JSON.stringify(req.body));
+  // console.log(req.file);
   // return
 
   const insertQuery = 'INSERT INTO questions (question, note, type, path) VALUES (?, ?, ?, ?)';
@@ -52,6 +53,37 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
   });
   res.send(JSON.stringify(insertResult));
 });
+
+
+
+
+
+
+
+
+
+
+app.post('/submit/question/update', upload.single('file'), async (req, res) => {
+  try {
+    const { id, question_update, note_update, type_update } = req.body;
+    console.log(req.body);
+    return
+
+    const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
+    const insertResult = await new Promise((resolve, reject) => {
+      db.query(insertQuery, [question, note, type, imagePath, id], (error, results, fields) => {
+        if (error) reject(error);
+        resolve(results);
+      });
+    });
+    res.send(JSON.stringify(insertResult));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Failed to update question');
+  }
+});
+
+
 
 
 app.get('/fetch/question/:id', (req, res) => {
@@ -70,6 +102,7 @@ app.get('/fetch/question/:id', (req, res) => {
 
 
 app.post('/fetch/questions', (req, res) => {
+  console.log(res);
   const query = 'SELECT * FROM questions';
 
   db.query(query, (err, results) => {

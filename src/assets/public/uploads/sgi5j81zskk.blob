@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="en"><head>
+  <script type="module" src="/@vite/client"></script>
+
+  <meta charset="utf-8">
+  <title>Examples</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="stylesheet" href="styles.css"><style ng-app-id="ng">
+
+/*# sourceMappingURL=app.component.css.map */</style><style ng-app-id="ng">
+
+/*# sourceMappingURL=index.component.css.map */</style></head>
+<body><!--nghm-->
+  <app-root _nghost-ng-c1933515739="" ng-version="17.2.4" ngh="1" ng-server-context="ssr"><router-outlet _ngcontent-ng-c1933515739=""></router-outlet><app-index _nghost-ng-c3116599688="" ngh="0"><section _ngcontent-ng-c3116599688="" class="relative flex items-center h-screen pt-16 header max-h-860-px"><div _ngcontent-ng-c3116599688="" class="container flex flex-wrap items-center mx-auto"><div _ngcontent-ng-c3116599688="" class="w-full px-4 md:w-8/12 lg:w-6/12 xl:w-6/12"><div _ngcontent-ng-c3116599688="" class="pt-32 sm:pt-0"><h2 _ngcontent-ng-c3116599688="" class="text-4xl font-semibold text-blueGray-600">The exam center for candidate.</h2><p _ngcontent-ng-c3116599688="" class="mt-4 text-lg leading-relaxed text-blueGray-500">“You can’t stop the future. You can’t rewind the past.The only way to learn the secret s to press play.”</p><div _ngcontent-ng-c3116599688="" class="mt-5"><input _ngcontent-ng-c3116599688="" type="text" placeholder="Enter your ID or Name here" class="relative px-3 py-3 pt-5 pl-5 text-sm bg-white border-0 rounded shadow outline-none placeholder-blueGray-300 text-blueGray-600 focus:outline-none focus:ring ng-untouched ng-pristine ng-valid" ng-reflect-model="" value=""></div><div _ngcontent-ng-c3116599688="" class="flex flex-row flex-wrap justify-start mt-12 justify-items-start"><a _ngcontent-ng-c3116599688="" class="px-6 py-4 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-purple-600 rounded shadow outline-none get-started active:bg-purple-800 hover:bg-purple-700 focus:outline-none sm:mr-2">Get started</a><a _ngcontent-ng-c3116599688="" routerlink="/define" class="px-6 py-4 mb-1 ml-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-green-600 rounded shadow outline-none github-star active:bg-green-800 hover:bg-green-700 focus:outline-none sm:mr-2" ng-reflect-router-link="/define" href="/define">Define Exams</a></div></div></div></div></section></app-index><!--container--></app-root>
+<script src="polyfills.js" type="module"></script><script src="scripts.js" defer=""></script><script src="main.js" type="module"></script>
+
+<script id="ng-state" type="application/json">{"__nghData__":[{},{"c":{"0":[{"i":"c3116599688","r":1}]}}]}</script></body></html>
