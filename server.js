@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const app = express();
-const fs = require('fs');
 const port = 3000;
 const mysql = require('mysql');
 const cors = require('cors');
@@ -10,7 +9,7 @@ const { log } = require('console');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'src/assets/public/uploads');
+    cb(null, 'src/assets/uploads/');
   },
   filename: function (req, file, cb) {
     const uniqueId = Math.random().toString(36).substr(2, 15);
@@ -38,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 app.post('/submit/question', upload.single('file'), async (req, res) => {
   const { question, note, type } = req.body;
-  const imagePath = `assets/public/uploads/${req.file.filename}`;
+  const imagePath = `assets/uploads/${req.file.filename}`;
 
   // console.log(imagePath);
   // console.log(JSON.stringify(req.body));
@@ -54,6 +53,17 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
   });
   res.send(JSON.stringify(insertResult));
 });
+
+
+
+
+
+const fs = require('fs');
+
+
+
+
+
 app.post('/submit/question/update', upload.single('file-update'), async (req, res) => {
   try {
     // console.log(req.file);
@@ -61,7 +71,9 @@ app.post('/submit/question/update', upload.single('file-update'), async (req, re
     const { id, question_update, note_update, type_update } = req.body;
     const uniqueId = Math.random().toString(36).substr(2, 15);
     const newFilename = `${uniqueId}.png`;
-    const imagePath = `assets/public/uploads/${newFilename}`;
+    const imagePath = `assets/uploads/${newFilename}`;
+
+
 
     const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
     const insertResult = await new Promise((resolve, reject) => {
