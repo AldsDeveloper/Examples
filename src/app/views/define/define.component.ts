@@ -206,6 +206,25 @@ export class DefineComponent implements AfterViewInit {
     );
   }
 
+  selectedIds: number[] = [];
+
+  checkAll(): void {
+    const allChecked = this.questions.every(question => question.checked);
+    this.questions.forEach(question => question.checked = !allChecked);
+  }
+
+
+  uncheckAll(): void {
+    this.questions.forEach(question => question.checked = false);
+  }
+
+
+  deleteMultiple(): void {
+    this.selectedIds = this.questions.filter(question => question.checked).map(question => question.id);
+
+    alert('xxxx');
+  }
+
 
 }
 
