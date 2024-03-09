@@ -165,31 +165,33 @@
                 <span class="sr-only">Close modal</span>
               </button>
         </div>
-        <form class="p-4 md:p-5" (ngSubmit)="submitForm()">
+        <form class="p-4 md:p-5" (click)="submitFormUpdate()">
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div class="col-span-2">
               <label for="question" class="block mb-2 text-sm font-medium text-gray-900">Question</label>
-              <textarea id="question" name="question" [(ngModel)]="formData.question" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here"></textarea>
+              <textarea id="question" name="question"  rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here"></textarea>
             </div>
             <div class="col-span-2">
               <label for="note" class="block mb-2 text-sm font-medium text-gray-900">Note</label>
-              <input type="text" name="note" id="note" [(ngModel)]="formData.note" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Type product name" required="">
+              <input type="text" name="note" id="note"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Type product name" required="">
             </div>
             <div class="col-span-2">
               <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Answer Type</label>
-              <select id="type" name="type" [(ngModel)]="formData.type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+              <select id="type" name="type"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                 <option selected value="true">Text</option>
                 <option value="false">Code Editor</option>
               </select>
             </div>
             <div class="col-span-2">
               <label for="file" class="block mb-2 text-sm font-medium text-gray-900">File</label>
-              <file-pond #filepondedit type="file" [files]="pondFiles" acceptedFileTypes="image/jpeg, image/png"  server="http://localhost:4200/assets/public/uploads/nzarjrmjx2h.png" (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
-              </file-pond>
+              <input  #filepondedit type="file" [files]="pondFiles" acceptedFileTypes="image/jpeg, image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
+              <!-- <file-pond  #filepondedit type="file" [files]="pondFiles" acceptedFileTypes="image/jpeg, image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
+              </file-pond> -->
+              <!-- </inpu> -->
               </div>
           </div>
           <div class="flex justify-center">
-            <button type="submit" class="text-white inline-flex items-center bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+            <button class="text-white inline-flex items-center bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
               <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
               Add new product
             </button>
@@ -198,3 +200,19 @@
     </div>
   </div>
 </div>
+
+
+<script>
+
+  const pondEdit = FilePond.create(this.filepondedit.nativeElement);
+  pondEdit.on('addfile', (error, file) => {
+      if (error) {
+          console.log('File Upload Error: ', error);
+      } else {
+          console.log('File Uploaded', file);
+          this.uploadedFile = file.file;
+      }
+  });
+
+
+</script>

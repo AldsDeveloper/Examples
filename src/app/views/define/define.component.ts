@@ -83,19 +83,27 @@ export class DefineComponent implements AfterViewInit {
         console.error('Error fetching question:', error);
         alert('Error fetching question!');
     });
-}
-
-
+  }
 
   fillEditModal(formData: any): void {
     this.formData = formData;
     console.log(formData.path);
     this.pondFiles = [formData.path];
+
+    const pondEdit = FilePond.create(this.filepondedit.nativeElement);
+          pondEdit.on('addfile', (error, file) => {
+              if (error) {
+                  console.log('File Upload Error: ', error);
+              } else {
+                  console.log('File Uploaded', file);
+                  this.uploadedFile = file.file;
+              }
+          });
     this.openModal('edit-modal');
   }
 
   pondHandleInit() {
-    console.log('FilePond has initialised', this.filepondedit);
+    console.log('FilePond has initialised', this.filepond);
   }
 
   pondHandleAddFile(event: any) {
@@ -122,15 +130,7 @@ export class DefineComponent implements AfterViewInit {
               }
           });
 
-          const pondEdit = FilePond.create(this.filepondedit.nativeElement, pondOptions);
-          pondEdit.on('addfile', (error, file) => {
-              if (error) {
-                  console.log('File Upload Error: ', error);
-              } else {
-                  console.log('File Uploaded', file);
-                  this.uploadedFile = file.file;
-              }
-          });
+
       }, 0);
   }
 
@@ -149,12 +149,41 @@ export class DefineComponent implements AfterViewInit {
     this.http.post<any>('http://localhost:3000/submit/question', formData).subscribe((response) => {
       console.log(response);
       alert('Form submitted successfully');
+      location.reload()
     }, (error) => {
       console.error(error);
       alert('Failed to submit form');
     });
   }
 
+
+  editData = { question: '', note: '', type: 'true' };
+
+
+  submitFormUpdate(): void {
+
+    const editData = new FormData();
+    editData.append('question', this.editData.question);
+    editData.append('note', this.editData.note);
+    editData.append('type', this.editData.type);
+
+    // if (this.uploadedFile) {
+    //   // formData.append('file', this.uploadedFile);
+    // } else {
+    //   console.log('No file selected edit');
+    //   return;
+    // }
+    console.log(editData);
+    return
+    this.http.post<any>('http://localhost:3000/submit/question', editData).subscribe((response) => {
+      console.log(response);
+      alert('Form submitted successfully');
+      location.reload()
+    }, (error) => {
+      console.error(error);
+      alert('Failed to submit form');
+    });
+  }
 
 
 
