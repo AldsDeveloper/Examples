@@ -188,7 +188,7 @@
             </div>
             <div class="col-span-2">
               <label for="file" class="block mb-2 text-sm font-medium text-gray-900">File</label>
-              <input  #filepondedit type="file" [files]="pondFiles" acceptedFileTypes="image/jpeg, image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
+              <input  #filepondedit type="file" name="file-update" [files]="pondFiles" acceptedFileTypes="image/jpeg, image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
               <!-- <file-pond  #filepondedit type="file" [files]="pondFiles" acceptedFileTypes="image/jpeg, image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
               </file-pond> -->
               <!-- </inpu> -->

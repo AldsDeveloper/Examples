@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const app = express();
+const fs = require('fs');
 const port = 3000;
 const mysql = require('mysql');
 const cors = require('cors');
@@ -53,25 +54,18 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
   });
   res.send(JSON.stringify(insertResult));
 });
-
-
-
-
-
-
-
-
-
-
-app.post('/submit/question/update', upload.single('file'), async (req, res) => {
+app.post('/submit/question/update', upload.single('file-update'), async (req, res) => {
   try {
+    // console.log(req.file);
+    // return
     const { id, question_update, note_update, type_update } = req.body;
-    console.log(req.body);
-    return
+    const uniqueId = Math.random().toString(36).substr(2, 15);
+    const newFilename = `${uniqueId}.png`;
+    const imagePath = `assets/public/uploads/${newFilename}`;
 
     const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
     const insertResult = await new Promise((resolve, reject) => {
-      db.query(insertQuery, [question, note, type, imagePath, id], (error, results, fields) => {
+      db.query(insertQuery, [question_update, note_update, type_update, imagePath, id], (error, results, fields) => {
         if (error) reject(error);
         resolve(results);
       });
@@ -82,6 +76,7 @@ app.post('/submit/question/update', upload.single('file'), async (req, res) => {
     res.status(500).send('Failed to update question');
   }
 });
+
 
 
 

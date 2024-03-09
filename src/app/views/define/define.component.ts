@@ -177,7 +177,7 @@ submitFormUpdate(): void {
     formDataUpdate.append('id', this.formDataUpdate.id);
 
     if (this.updatedFile) {
-      formDataUpdate.append('file_update', this.updatedFile);
+      formDataUpdate.append('file-update', this.updatedFile);
     } else {
       console.log('No file selected');
       return;
@@ -188,7 +188,7 @@ submitFormUpdate(): void {
 
     this.http.post<any>('http://localhost:3000/submit/question/update', formDataUpdate).subscribe((response) => {
       console.log(response);
-      alert('Form submitted successfully');
+      alert('Form updated successfully');
       location.reload()
     }, (error) => {
       console.error(error);
