@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { EditorModule } from '@tinymce/tinymce-angular'
 import { ReactiveFormsModule } from '@angular/forms';
 
-
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ErrorComponent } from './views/error/error.component';
@@ -22,6 +22,9 @@ import { ComponentsComponent } from './components/components.component';
 import * as FilePond from 'filepond';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import { HttpClient } from '@angular/common/http';
+import { SigninComponent } from './views/auth/signin/signin.component';
+import { SignupComponent } from './views/auth/signup/signup.component';
+import { initAccordions, initFlowbite } from 'flowbite';
 
 
 @NgModule({
@@ -35,6 +38,8 @@ import { HttpClient } from '@angular/common/http';
     FooterComponent,
     LayoutsComponent,
     ComponentsComponent,
+    SigninComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,12 +52,14 @@ import { HttpClient } from '@angular/common/http';
     EditorModule,
     FilePondModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
 
   ],
   providers: [
     provideClientHydration()
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent,
+  ]
 })
 export class AppModule { }

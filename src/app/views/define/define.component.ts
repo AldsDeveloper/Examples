@@ -9,7 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
-
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as FilePond from 'filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { registerPlugin } from 'filepond';
@@ -17,7 +19,6 @@ import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 FilePond.registerPlugin(FilePondPluginImageCrop);
 FilePond.registerPlugin(FilePondPluginImagePreview);
-
 @Component({
   selector: 'app-define',
   templateUrl: './define.component.html',
@@ -34,10 +35,11 @@ export class DefineComponent implements AfterViewInit {
 
   uploadedFile: File | null = null;
 
+  updatedFile: File | null = null;
+
   public imageUrl: string | undefined;
 
-  constructor(private http: HttpClient) { }
-
+  constructor( private http: HttpClient) { }
 
   questions: any[] = [];
 
@@ -45,11 +47,37 @@ export class DefineComponent implements AfterViewInit {
 
   currentModal: string | null = null;
 
-  ngOnInit(): void { this.fetchQuestion() }
+  formData = { question: '', note: '', type: 'true' };
+
+  formDataUpdate = { question: '', note: '', type: '' ,id: ''};
+
+  ngOnInit(): void { this.fetchQuestion(); initFlowbite(); }
+
+  ngAfterViewInit() {
+    initFlowbite();
+
+    const pondOptions = {
+      allowReorder: true,
+      maxFileSize: '5MB',
+      maxFiles: 3
+    };
+
+      setTimeout(() => {
+          const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
+          pond.on('addfile', (error, file) => {
+              if (error) {
+                  console.log('File Upload Error: ', error);
+              } else {
+                  console.log('File Uploaded', file);
+                  this.uploadedFile = file.file;
+              }
+          });
+      }, 0);
+  }
 
   fetchQuestion() {
     this.http.post('http://localhost:3000/fetch/questions', {}).subscribe((response: any) => {
-      console.log('Questions response:', response);
+      // console.log('Questions response:', response);
       this.questions = response;
     }, error => {
       console.error('Error fetch question:', error);
@@ -75,46 +103,37 @@ export class DefineComponent implements AfterViewInit {
     }
   }
 
-formData = { question: 'xxxxxx', note: 'xxxxxx', type: '' };
 
-formDataUpdate = { question: '', note: '', type: '' ,id: ''};
+  fetchQuestionById(id: number): void {
+    this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
+      this.fillEditModal(response);
+    }, error => {
+      console.error('Error fetching question:', error);
+      alert('Error fetching question!');
+    });
+  }
 
-fetchQuestionById(id: number): void {
-  this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
-    this.fillEditModal(response);
-  }, error => {
-    console.error('Error fetching question:', error);
-    alert('Error fetching question!');
-  });
-}
+  fillEditModal(response: any): void {
+    console.log(response.path);
 
-updatedFile: File | null = null;
-
-
-fillEditModal(response: any): void {
-  console.log(response.path);
-
-  this.formDataUpdate = {
-    id: response.id,
-    question: response.question,
-    note: response.note,
-    type: response.type
-  };
+    this.formDataUpdate = {
+      id: response.id,
+      question: response.question,
+      note: response.note,
+      type: response.type
+    };
 
 
-  const pondEdit = FilePond.create(this.filepondedit.nativeElement);
-  pondEdit.removeFiles();
-  pondEdit.addFile(response.path).then((fileupdate) => {
-    console.log('File Added', fileupdate);
-    this.updatedFile = fileupdate.file as File;
-    this.openModal('edit-modal');
-  }).catch((error) => {
-    console.error('File Add Error:', error);
-  });
-}
-
-
-
+    const pondEdit = FilePond.create(this.filepondedit.nativeElement);
+    pondEdit.removeFiles();
+    pondEdit.addFile(response.path).then((fileupdate) => {
+      console.log('File Added', fileupdate);
+      this.updatedFile = fileupdate.file as File;
+      this.openModal('edit-modal');
+    }).catch((error) => {
+      console.error('File Add Error:', error);
+    });
+  }
 
   pondHandleInit() {
     console.log('FilePond has initialised', this.filepond);
@@ -122,28 +141,6 @@ fillEditModal(response: any): void {
 
   pondHandleAddFile(event: any) {
     console.log('A file was added', event.file.filename);
-  }
-
-  ngAfterViewInit() {
-      initFlowbite()
-
-      const pondOptions = {
-        allowReorder: true,
-        maxFileSize: '5MB',
-        maxFiles: 3
-      };
-
-      setTimeout(() => {
-          const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
-          pond.on('addfile', (error, file) => {
-              if (error) {
-                  console.log('File Upload Error: ', error);
-              } else {
-                  console.log('File Uploaded', file);
-                  this.uploadedFile = file.file;
-              }
-          });
-      }, 0);
   }
 
   submitForm(): void {
@@ -168,8 +165,7 @@ fillEditModal(response: any): void {
     });
   }
 
-
-submitFormUpdate(): void {
+  submitFormUpdate(): void {
     const formDataUpdate = new FormData();
     formDataUpdate.append('question_update', this.formDataUpdate.question);
     formDataUpdate.append('note_update', this.formDataUpdate.note);
@@ -196,18 +192,18 @@ submitFormUpdate(): void {
     });
   }
 
-
   deleteQuestion(questionId: number): void {
-    alert(questionId);
-    // return
-    this.http.post('http://localhost:3000/question/delete',{questionId}).subscribe((response) => {
-      console.log(response);
-      alert('Question deleted successfully');
-      location.reload()
-    }, (error) => {
-      console.error(error);
-      alert('Failed to delete question');
-    });
+    this.http.post('http://localhost:3000/question/delete', { questionId }).subscribe(
+      (response) => {
+        console.log(response);
+        alert('Question deleted successfully');
+        location.reload();
+      },
+      (error) => {
+        console.error(error);
+        alert('Failed to delete question');
+      }
+    );
   }
 
 

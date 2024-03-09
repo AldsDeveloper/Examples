@@ -80,22 +80,41 @@ app.post('/submit/question/update', upload.single('file-update'), async (req, re
 });
 
 
-
 app.post('/question/delete', (req, res) => {
   const { questionId } = req.body;
-  console.log(questionId);
-  return
-  if (!id) {
-    return res.status(400).json({ error: 'Missing question id' });
-  }
-  const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
-    const insertResult = new Promise((resolve, reject) => {
-      db.query(insertQuery, [question_update, note_update, type_update, imagePath, id], (error, results, fields) => {
-        if (error) reject(error);
-        resolve(results);
+
+  const getPathQuery = 'SELECT path FROM questions WHERE id = ?';
+  db.query(getPathQuery, [questionId], (getPathError, getPathResults) => {
+    if (getPathError) {
+      console.error(getPathError);
+      return res.status(500).json({ error: 'Failed to fetch file path' });
+    }
+
+    const filePath = 'src/' + getPathResults[0].path;
+
+    // console.log(filePath);
+
+    fs.unlink(filePath, (unlinkError) => {
+      if (unlinkError) {
+        console.error(unlinkError);
+        return res.status(500).json({ error: 'Failed to delete file' });
+      }
+
+      const deleteQuery = 'DELETE FROM questions WHERE id = ?';
+      db.query(deleteQuery, [questionId], (deleteError, deleteResults) => {
+        if (deleteError) {
+          console.error(deleteError);
+          return res.status(500).json({ error: 'Failed to delete question' });
+        }
+
+        return res.json({ message: 'Question deleted successfully' });
       });
     });
+  });
 });
+
+
+
 
 
 
