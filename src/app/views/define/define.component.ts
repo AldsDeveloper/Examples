@@ -85,22 +85,19 @@ export class DefineComponent implements AfterViewInit {
     });
   }
 
-  fillEditModal(formData: any): void {
-    this.formData = formData;
-    console.log(formData.path);
-    this.pondFiles = [formData.path];
-
+  fillEditModal(response: any): void {
+    console.log(response.path);
     const pondEdit = FilePond.create(this.filepondedit.nativeElement);
-          pondEdit.on('addfile', (error, file) => {
-              if (error) {
-                  console.log('File Upload Error: ', error);
-              } else {
-                  console.log('File Uploaded', file);
-                  this.uploadedFile = file.file;
-              }
-          });
-    this.openModal('edit-modal');
+    pondEdit.removeFiles();
+    pondEdit.addFile(response.path).then((file) => {
+      console.log('File Added', file);
+      this.openModal('edit-modal');
+    }).catch((error) => {
+      console.error('File Add Error:', error);
+      //
+    });
   }
+
 
   pondHandleInit() {
     console.log('FilePond has initialised', this.filepond);
@@ -129,8 +126,6 @@ export class DefineComponent implements AfterViewInit {
                   this.uploadedFile = file.file;
               }
           });
-
-
       }, 0);
   }
 
@@ -173,6 +168,8 @@ export class DefineComponent implements AfterViewInit {
     //   console.log('No file selected edit');
     //   return;
     // }
+
+    alert('xxxxxxxx')
     console.log(editData);
     return
     this.http.post<any>('http://localhost:3000/submit/question', editData).subscribe((response) => {
