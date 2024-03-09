@@ -6,6 +6,7 @@ const port = 3000;
 const mysql = require('mysql');
 const cors = require('cors');
 const { log } = require('console');
+const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -53,17 +54,6 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
   });
   res.send(JSON.stringify(insertResult));
 });
-
-
-
-
-
-const fs = require('fs');
-
-
-
-
-
 app.post('/submit/question/update', upload.single('file-update'), async (req, res) => {
   try {
     // console.log(req.file);
@@ -91,6 +81,22 @@ app.post('/submit/question/update', upload.single('file-update'), async (req, re
 
 
 
+app.post('/question/delete', (req, res) => {
+  const { questionId } = req.body;
+  console.log(questionId);
+  return
+  if (!id) {
+    return res.status(400).json({ error: 'Missing question id' });
+  }
+  const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
+    const insertResult = new Promise((resolve, reject) => {
+      db.query(insertQuery, [question_update, note_update, type_update, imagePath, id], (error, results, fields) => {
+        if (error) reject(error);
+        resolve(results);
+      });
+    });
+});
+
 
 
 app.get('/fetch/question/:id', (req, res) => {
@@ -106,8 +112,6 @@ app.get('/fetch/question/:id', (req, res) => {
     res.json(results[0]);
   });
 });
-
-
 app.post('/fetch/questions', (req, res) => {
   console.log(res);
   const query = 'SELECT * FROM questions';
@@ -117,7 +121,4 @@ app.post('/fetch/questions', (req, res) => {
     res.json(results);
   });
 });
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.listen(port, () => { console.log(`Server is running on port ${port}`); });

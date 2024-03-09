@@ -82,7 +82,8 @@
                 <td class="px-6 py-4">{{ question.created_at }}</td>
                 <td class="flex justify-center px-6 py-4">
                   <button (click)="fetchQuestionById(question.id)" data-modal-target="edit-modal" data-modal-toggle="edit-modal" class="block text-blue-600 font-medium  hover:underline px-3 py-2.5 text-center " type="button">Edit</button>
-                  <button  class="block text-red-600 font-medium  hover:underline px-3 py-2.5 text-center " type="button">Delete</button>
+                  <button (click)="deleteQuestion(question.id)" class="block text-red-600 font-medium hover:underline px-3 py-2.5 text-center" type="button">Delete</button>
+
                 </td>
               </tr>
             </tbody>
@@ -150,8 +151,6 @@
     </div>
   </div>
 </div>
-
-
 <!-- EDIT MODAL -->
 <div id="edit-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
   <div class="relative w-full max-w-md max-h-full p-4">
@@ -207,16 +206,5 @@
 
 
 <script>
-
-  const pondEdit = FilePond.create(this.filepondedit.nativeElement);
-  pondEdit.on('addfile', (error, file) => {
-      if (error) {
-          console.log('File Upload Error: ', error);
-      } else {
-          console.log('File Uploaded', file);
-          this.uploadedFile = file.file;
-      }
-  });
-
-
+  //
 </script>

@@ -195,6 +195,22 @@ submitFormUpdate(): void {
       alert('Failed to submit form');
     });
   }
+
+
+  deleteQuestion(questionId: number): void {
+    alert(questionId);
+    // return
+    this.http.post('http://localhost:3000/question/delete',{questionId}).subscribe((response) => {
+      console.log(response);
+      alert('Question deleted successfully');
+      location.reload()
+    }, (error) => {
+      console.error(error);
+      alert('Failed to delete question');
+    });
+  }
+
+
 }
 
 
