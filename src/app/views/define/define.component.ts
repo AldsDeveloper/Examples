@@ -10,10 +10,6 @@ import { initFlowbite } from 'flowbite';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 
-
-import '@angular/platform-server/init';
-
-
 import * as FilePond from 'filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { registerPlugin } from 'filepond';
@@ -42,7 +38,7 @@ export class DefineComponent implements AfterViewInit {
 
   constructor(private http: HttpClient) { }
 
-  formData = { question: '', note: '', type: 'true',id: ''};
+  formData = { question: '', note: '', type: 'true' };
 
   questions: any[] = [];
 
@@ -52,7 +48,15 @@ export class DefineComponent implements AfterViewInit {
 
   ngOnInit(): void { this.fetchQuestion() }
 
-
+  fetchQuestion() {
+    this.http.post('http://localhost:3000/fetch/questions', {}).subscribe((response: any) => {
+      console.log('Questions response:', response);
+      this.questions = response;
+    }, error => {
+      console.error('Error fetch question:', error);
+      alert('Error qetch question!');
+    });
+  }
 
   openModal(modalId: string): void {
     if (this.currentModal === null) {
@@ -79,34 +83,15 @@ export class DefineComponent implements AfterViewInit {
         console.error('Error fetching question:', error);
         alert('Error fetching question!');
     });
-  }
+}
 
 
-  formEditData = { question_update: '', note_update: '', type_update: 'true', id: '' };
 
-  fetchQuestion() {
-    this.http.post('http://localhost:3000/fetch/questions', {}).subscribe((response: any) => {
-
-      console.log('Questions response:', response);
-    }, error => {
-      console.error('Error fetch question:', error);
-      alert('Error qetch question!');
-    });
-  }
-
-
-  fillEditModal(response: any): void {
-    // this.formEditData = response;
-    console.log(response.path);
-
-    // (<HTMLInputElement>document.getElementById('question-update')).value = response.question;
-    // (<HTMLInputElement>document.getElementById('note-update')).value = response.note;
-    // (<HTMLSelectElement>document.getElementById('type-update')).value = response.type;
-    // (<HTMLSelectElement>document.getElementById('id')).value = response.id;
-
-    if (response.path) {
-      this.pondFiles = [response.path];
-    }
+  fillEditModal(formData: any): void {
+    this.formData = formData;
+    console.log(formData.path);
+    this.pondFiles = [formData.path];
+    this.openModal('edit-modal');
   }
 
   pondHandleInit() {
@@ -115,7 +100,6 @@ export class DefineComponent implements AfterViewInit {
 
   pondHandleAddFile(event: any) {
     console.log('A file was added', event.file.filename);
-    this.uploadedFile = event.file.file;
   }
 
   ngAfterViewInit() {
@@ -165,36 +149,13 @@ export class DefineComponent implements AfterViewInit {
     this.http.post<any>('http://localhost:3000/submit/question', formData).subscribe((response) => {
       console.log(response);
       alert('Form submitted successfully');
-      location.reload()
     }, (error) => {
       console.error(error);
       alert('Failed to submit form');
     });
   }
 
-  submitFormUpdate(): void {
-    const formData = new FormData();
-    formData.append('question_update', this.formEditData.question_update);
-    formData.append('note_update', this.formEditData.note_update);
-    formData.append('type_update', this.formEditData.type_update);
-    formData.append('id', this.formEditData.id);
 
-    if (this.uploadedFile) {
-      // formData.append('file', this.uploadedFile);
-    } else {
-      console.log('No file selected');
-      return;
-    }
-
-    this.http.post<any>('http://localhost:3000/submit/question/update', formData).subscribe((response) => {
-      console.log(response);
-      alert('Form submitted successfully');
-      location.reload()
-    }, (error) => {
-      console.error(error);
-      alert('Failed to submit form');
-    });
-  }
 
 
 }
