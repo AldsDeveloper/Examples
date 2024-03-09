@@ -17,3 +17,12 @@ section {
   height: 60vh;
   overflow-y: auto;
 }
+
+
+/* CSS */
+td {
+  max-width: 150px; /* Set a max width for the table cells */
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide any overflowing text */
+  text-overflow: ellipsis; /* Display an ellipsis (...) to indicate truncated text */
+}
