@@ -6,6 +6,7 @@ import { NgModel } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule } from '@tinymce/tinymce-angular'
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -46,6 +47,7 @@ import { HttpClient } from '@angular/common/http';
     EditorModule,
     FilePondModule,
     HttpClientModule,
+    ReactiveFormsModule
 
   ],
   providers: [

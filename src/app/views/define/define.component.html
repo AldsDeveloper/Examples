@@ -118,7 +118,7 @@
                 <span class="sr-only">Close modal</span>
               </button>
         </div>
-        <form class="p-4 md:p-5" (ngSubmit)="submitForm()">
+        <form class="p-4 md:p-5">
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div class="col-span-2">
               <label for="question" class="block mb-2 text-sm font-medium text-gray-900">Question</label>
@@ -141,7 +141,7 @@
             </div>
           </div>
           <div class="flex justify-center">
-            <button type="submit" class="text-white inline-flex items-center bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+            <button (click)="submitForm()" class="text-white inline-flex items-center bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
               <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
               Add new product
             </button>
@@ -169,18 +169,22 @@
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div class="col-span-2">
               <label for="question" class="block mb-2 text-sm font-medium text-gray-900">Question</label>
-              <textarea id="question" name="question"  rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here"></textarea>
+              <textarea id="question" name="question" [(ngModel)]="formDataUpdate.question"  rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here"></textarea>
             </div>
             <div class="col-span-2">
               <label for="note" class="block mb-2 text-sm font-medium text-gray-900">Note</label>
-              <input type="text" name="note" id="note"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Type product name" required="">
+              <input type="text" name="note" id="note"  [(ngModel)]="formDataUpdate.note" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Type question name" required="">
             </div>
             <div class="col-span-2">
               <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Answer Type</label>
-              <select id="type" name="type"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                <option selected value="true">Text</option>
+              <select id="type" name="type"  [(ngModel)]="formDataUpdate.type"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                <option value="true">Text</option>
                 <option value="false">Code Editor</option>
               </select>
+            </div>
+            <div class="col-span-2">
+              <label for="id" class="block mb-2 text-sm font-medium text-gray-900">ID</label>
+              <input type="text" name="id" id="id" [(ngModel)]="formDataUpdate.id"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="ID" required="">
             </div>
             <div class="col-span-2">
               <label for="file" class="block mb-2 text-sm font-medium text-gray-900">File</label>

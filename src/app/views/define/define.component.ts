@@ -38,7 +38,6 @@ export class DefineComponent implements AfterViewInit {
 
   constructor(private http: HttpClient) { }
 
-  formData = { question: '', note: '', type: 'true' };
 
   questions: any[] = [];
 
@@ -76,27 +75,45 @@ export class DefineComponent implements AfterViewInit {
     }
   }
 
-  fetchQuestionById(id: number): void {
-    this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
-        this.fillEditModal(response);
-    }, error => {
-        console.error('Error fetching question:', error);
-        alert('Error fetching question!');
-    });
-  }
+formData = { question: 'xxxxxx', note: 'xxxxxx', type: '' };
 
-  fillEditModal(response: any): void {
-    console.log(response.path);
-    const pondEdit = FilePond.create(this.filepondedit.nativeElement);
-    pondEdit.removeFiles();
-    pondEdit.addFile(response.path).then((file) => {
-      console.log('File Added', file);
-      this.openModal('edit-modal');
-    }).catch((error) => {
-      console.error('File Add Error:', error);
-      //
-    });
-  }
+formDataUpdate = { question: '', note: '', type: '' ,id: ''};
+
+fetchQuestionById(id: number): void {
+  this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
+    this.fillEditModal(response);
+  }, error => {
+    console.error('Error fetching question:', error);
+    alert('Error fetching question!');
+  });
+}
+
+updatedFile: File | null = null;
+
+
+fillEditModal(response: any): void {
+  console.log(response.path);
+
+  this.formDataUpdate = {
+    id: response.id,
+    question: response.question,
+    note: response.note,
+    type: response.type
+  };
+
+
+  const pondEdit = FilePond.create(this.filepondedit.nativeElement);
+  pondEdit.removeFiles();
+  pondEdit.addFile(response.path).then((fileupdate) => {
+    console.log('File Added', fileupdate);
+    this.updatedFile = fileupdate.file as File;
+    this.openModal('edit-modal');
+  }).catch((error) => {
+    console.error('File Add Error:', error);
+  });
+}
+
+
 
 
   pondHandleInit() {
@@ -152,27 +169,24 @@ export class DefineComponent implements AfterViewInit {
   }
 
 
-  editData = { question: '', note: '', type: 'true' };
+submitFormUpdate(): void {
+    const formDataUpdate = new FormData();
+    formDataUpdate.append('question_update', this.formDataUpdate.question);
+    formDataUpdate.append('note_update', this.formDataUpdate.note);
+    formDataUpdate.append('type_update', this.formDataUpdate.type);
+    formDataUpdate.append('id', this.formDataUpdate.id);
 
+    if (this.updatedFile) {
+      formDataUpdate.append('file_update', this.updatedFile);
+    } else {
+      console.log('No file selected');
+      return;
+    }
+    console.log('Form data EDIT:', this.formDataUpdate);
+    console.log('File darta EDIT:', this.updatedFile);
+    // return
 
-  submitFormUpdate(): void {
-
-    const editData = new FormData();
-    editData.append('question', this.editData.question);
-    editData.append('note', this.editData.note);
-    editData.append('type', this.editData.type);
-
-    // if (this.uploadedFile) {
-    //   // formData.append('file', this.uploadedFile);
-    // } else {
-    //   console.log('No file selected edit');
-    //   return;
-    // }
-
-    alert('xxxxxxxx')
-    console.log(editData);
-    return
-    this.http.post<any>('http://localhost:3000/submit/question', editData).subscribe((response) => {
+    this.http.post<any>('http://localhost:3000/submit/question/update', formDataUpdate).subscribe((response) => {
       console.log(response);
       alert('Form submitted successfully');
       location.reload()
@@ -181,9 +195,6 @@ export class DefineComponent implements AfterViewInit {
       alert('Failed to submit form');
     });
   }
-
-
-
 }
 
 
