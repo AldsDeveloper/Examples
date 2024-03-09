@@ -60,6 +60,7 @@
             <div class="flex flex-row ">
               <button (click)="deleteMultiple()" class="block text-white bg-red-600  hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center" type="button">Delete question all</button>
               <button data-modal-target="create-modal" data-modal-toggle="create-modal" class="block ml-3 text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center " type="button">Created Question</button>
+              <button data-modal-target="edit-modal" type="button" data-modal-toggle="edit-modal">Edit modal</button>
             </div>
         </div>
         <div class="relative overflow-x-auto shadow-xl sm:rounded-lg table-container">
@@ -96,7 +97,7 @@
                 <td class="px-6 py-4">{{ question.note }}</td>
                 <td class="px-6 py-4">{{ question.created_at }}</td>
                 <td class="flex justify-center px-6 py-4">
-                  <button (click)="fetchQuestionById(question.id)" data-modal-target="edit-modal" data-modal-toggle="edit-modal" class="block text-blue-600 font-medium  hover:underline px-3 py-2.5 text-center " type="button">Edit</button>
+                  <button (click)="fetchQuestionById(question.id)" class="block text-blue-600 font-medium  hover:underline px-3 py-2.5 text-center ">Edit</button>
                   <button (click)="deleteQuestion(question.id)" class="block text-red-600 font-medium hover:underline px-3 py-2.5 text-center" type="button">Delete</button>
                 </td>
               </tr>
@@ -123,6 +124,9 @@
         </div>
     </section>
 </main>
+
+
+
 
 <style>
   .main {
@@ -264,5 +268,4 @@
   </div>
 </div>
 
-<button data-modal-target="edit-modal" data-modal-toggle="edit-modal" hidden></button>
 <script src="./assets/js/flowbite/flowbite.js"></script>

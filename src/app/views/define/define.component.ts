@@ -44,6 +44,7 @@ export class DefineComponent implements AfterViewInit {
 
 
 
+
   pondFiles = [''];
 
   currentModal: string | null = null;
@@ -129,6 +130,9 @@ export class DefineComponent implements AfterViewInit {
   }
 
 
+
+
+
   setCurrentPage(page: number) {
     this.currentPage = page;
     this.fetchQuestions(this.currentPage, this.itemsPerPage);
@@ -209,34 +213,34 @@ previousPage() {
 
   fetchQuestionById(id: number): void {
     this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
-      this.fillEditModal(response);
+        this.fillEditModal(response);
     }, error => {
-      console.error('Error fetching question:', error);
-      alert('Error fetching question!');
+        console.error('Error fetching question:', error);
+        alert('Error fetching question!');
     });
   }
 
-  fillEditModal(response: any): void {
-    console.log(response.path);
+fillEditModal(response: any): void {
+  console.log(response.path);
 
-    this.formDataUpdate = {
-      id: response.id,
-      question: response.question,
-      note: response.note,
-      type: response.type
-    };
+  this.formDataUpdate = {
+    id: response.id,
+    question: response.question,
+    note: response.note,
+    type: response.type
+  };
 
 
-    const pondEdit = FilePond.create(this.filepondedit.nativeElement);
-    pondEdit.removeFiles();
-    pondEdit.addFile(response.path).then((fileupdate) => {
-      console.log('File Added', fileupdate);
-      this.updatedFile = fileupdate.file as File;
-      this.openModal('edit-modal');
-    }).catch((error) => {
-      console.error('File Add Error:', error);
-    });
-  }
+  const pondEdit = FilePond.create(this.filepondedit.nativeElement);
+  pondEdit.removeFiles();
+  pondEdit.addFile(response.path).then((fileupdate) => {
+    console.log('File Added', fileupdate);
+    this.updatedFile = fileupdate.file as File;
+    this.openModal('edit-modal');
+  }).catch((error) => {
+    console.error('File Add Error:', error);
+  });
+}
 
   pondHandleInit() {
     console.log('FilePond has initialised', this.filepond);
@@ -324,8 +328,22 @@ previousPage() {
 
   deleteMultiple(): void {
     this.selectedIds = this.questions.filter(question => question.checked).map(question => question.id);
+    if (this.selectedIds[0] == null) {
+      alert('Please selected one data');
+      return
+    }
+    console.log(this.selectedIds);
+    // ตอนนี้ SelectedIds ข้อมูลเข้าแล้ว
+    // return
 
-    alert('xxxx');
+    this.http.post<any>('http://localhost:3000/submit/question', this.selectedIds).subscribe((response) => {
+      console.log(response);
+      alert('Form submitted successfully');
+      // location.reload()
+    }, (error) => {
+      console.error(error);
+      alert('Failed to submit form');
+    });
   }
 
 

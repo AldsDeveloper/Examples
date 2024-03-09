@@ -40,10 +40,10 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
   const { question, note, type } = req.body;
   const imagePath = `assets/uploads/${req.file.filename}`;
 
-  // console.log(imagePath);
+  console.log(imagePath);
   // console.log(JSON.stringify(req.body));
   // console.log(req.file);
-  // return
+  return
 
   const insertQuery = 'INSERT INTO questions (question, note, type, path) VALUES (?, ?, ?, ?)';
   const insertResult = await new Promise((resolve, reject) => {
@@ -116,36 +116,7 @@ app.post('/question/delete', (req, res) => {
 
 
 app.post('/question/delete/multiple', (req, res) => {
-  const { questionId } = req.body;
-
-  const getPathQuery = 'SELECT path FROM questions WHERE id = ?';
-  db.query(getPathQuery, [questionId], (getPathError, getPathResults) => {
-    if (getPathError) {
-      console.error(getPathError);
-      return res.status(500).json({ error: 'Failed to fetch file path' });
-    }
-
-    const filePath = 'src/' + getPathResults[0].path;
-
-    // console.log(filePath);
-
-    fs.unlink(filePath, (unlinkError) => {
-      if (unlinkError) {
-        console.error(unlinkError);
-        return res.status(500).json({ error: 'Failed to delete file' });
-      }
-
-      const deleteQuery = 'DELETE FROM questions WHERE id = ?';
-      db.query(deleteQuery, [questionId], (deleteError, deleteResults) => {
-        if (deleteError) {
-          console.error(deleteError);
-          return res.status(500).json({ error: 'Failed to delete question' });
-        }
-
-        return res.json({ message: 'Question deleted successfully' });
-      });
-    });
-  });
+  console.log(req.body);
 });
 
 
