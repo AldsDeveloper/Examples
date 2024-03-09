@@ -60,8 +60,6 @@
           <button (click)="deleteMultiple()" class="block text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center" type="button">Delete question all</button>
           <button data-modal-target="create-modal" data-modal-toggle="create-modal" class="block text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center " type="button">Created Question</button>
         </div>
-
-
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg table-container">
           <table class="w-full text-sm text-left text-gray-400 rtl:text-right">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -88,7 +86,7 @@
                     <label for="checkbox-table-{{ i }}" class="sr-only">checkbox</label>
                   </div>
                 </td>
-                <td class="px-6 py-4">{{ i + 1 }}</td>
+                <td class="px-6 py-4">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
                 <td class="px-6 py-4">{{ question.question }}</td>
                 <td class="px-6 py-4">
                   <a href="{{ question.path }}" target="_self" class="block text-blue-600 font-medium  hover:underline px-3 py-2.5 text-center " rel="noopener noreferrer">Show image</a>
@@ -102,31 +100,23 @@
               </tr>
             </tbody>
           </table>
-          <nav class="flex flex-wrap items-center justify-between pt-4 flex-column md:flex-row" aria-label="Table navigation">
-            <span class="block w-full mb-4 text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 ">1-10</span> of <span class="font-semibold text-gray-900 ">1000</span></span>
-            <ul class="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
+          <nav class="flex flex-wrap items-center justify-between pt-4 mt-1 flex-column md:flex-row" aria-label="Table navigation">
+            <div class="ml-5">
+              <span class="block w-full mb-4 text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">Showing <span class="font-semibold text-gray-900">{{ currentIndexRange.start }} - {{ currentIndexRange.last }}</span> of <span class="font-semibold text-gray-900">{{ allQuestions.length }}</span></span>
+            </div>
+            <div class="mr-5">
+              <ul class="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
                 <li>
-                    <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 ms-0 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">Previous</a>
+                  <a (click)="previousPage()" [hidden]="currentPage === 1" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 ms-0 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">Previous</a>
+                </li>
+                <li *ngFor="let page of range(1, totalPages)">
+                  <a (click)="setCurrentPage(page)" [class.text-purple-300]="currentPage === page" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{ page }}</a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">1</a>
+                  <a (click)="nextPage()" [hidden]="currentPage === totalPages" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">Next</a>
                 </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a>
-                </li>
-                <li>
-                    <a href="#" aria-current="page" class="flex items-center justify-center h-8 px-3 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700">3</a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">4</a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">5</a>
-                </li>
-                <li>
-            <a href="#" class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">Next</a>
-                </li>
-            </ul>
+              </ul>
+            </div>
           </nav>
         </div>
     </section>
@@ -243,4 +233,5 @@
   </div>
 </div>
 
+<button data-modal-target="edit-modal" data-modal-toggle="edit-modal" hidden></button>
 <script src="./assets/js/flowbite/flowbite.js"></script>

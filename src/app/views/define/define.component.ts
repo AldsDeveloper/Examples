@@ -17,6 +17,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { registerPlugin } from 'filepond';
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import { log } from 'console';
 FilePond.registerPlugin(FilePondPluginImageCrop);
 FilePond.registerPlugin(FilePondPluginImagePreview);
 @Component({
@@ -41,7 +42,7 @@ export class DefineComponent implements AfterViewInit {
 
   constructor( private http: HttpClient) { }
 
-  questions: any[] = [];
+
 
   pondFiles = [''];
 
@@ -51,7 +52,6 @@ export class DefineComponent implements AfterViewInit {
 
   formDataUpdate = { question: '', note: '', type: '' ,id: ''};
 
-  ngOnInit(): void { this.fetchQuestion(); initFlowbite(); }
 
   ngAfterViewInit() {
     initFlowbite();
@@ -62,28 +62,131 @@ export class DefineComponent implements AfterViewInit {
       maxFiles: 3
     };
 
-      setTimeout(() => {
-          const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
-          pond.on('addfile', (error, file) => {
-              if (error) {
-                  console.log('File Upload Error: ', error);
-              } else {
-                  console.log('File Uploaded', file);
-                  this.uploadedFile = file.file;
-              }
-          });
-      }, 0);
+    setTimeout(() => {
+      const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
+      pond.on('addfile', (error, file) => {
+        if (error) {
+          console.log('File Upload Error: ', error);
+        } else {
+          console.log('File Uploaded', file);
+          this.uploadedFile = file.file;
+        }
+      });
+    }, 0);
   }
 
-  fetchQuestion() {
-    this.http.post('http://localhost:3000/fetch/questions', {}).subscribe((response: any) => {
-      // console.log('Questions response:', response);
-      this.questions = response;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ngOnInit(): void {
+    initFlowbite();
+
+    this.fetchQuestions(1, this.itemsPerPage);
+    this.fetchAllQuestions(); // เรียกข้อมูลทั้งหมดใน database
+  }
+
+
+  questions: any[] = [];
+  allQuestions: any[] = [];
+  currentPage: number = 1;
+  itemsPerPage: number = 4;
+
+
+  range(start: number, end: number): number[] {
+    return Array.from({length: end - start + 1}, (_, index) => index + start);
+  }
+
+
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.fetchQuestions(this.currentPage, this.itemsPerPage);
+    }
+  }
+
+  fetchQuestions(page: number, limit: number) {
+    this.http.post('http://localhost:3000/fetch/questions', { start: (page - 1) * limit + 1, end: page * limit }).subscribe((response: any) => {
+      console.log(response);
+      this.questions = response.questions;
+
     }, error => {
-      console.error('Error fetch question:', error);
-      alert('Error qetch question!');
+      console.error('Error fetching questions:', error);
+      alert('Error fetching questions!');
     });
   }
+
+
+  setCurrentPage(page: number) {
+    this.currentPage = page;
+    this.fetchQuestions(this.currentPage, this.itemsPerPage);
+  }
+
+
+
+fetchAllQuestions() {
+  this.http.get('http://localhost:3000/fetch/all/questions').subscribe((response: any) => {
+    this.allQuestions = response;
+    this.fetchQuestions(this.currentPage, this.itemsPerPage);
+  }, error => {
+    console.error('Error fetch all questions:', error);
+    alert('Error fetch all questions!');
+  });
+}
+
+previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.fetchQuestions(this.currentPage, this.itemsPerPage);
+    }
+}
+
+
+
+
+  get currentPageQuestions(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.allQuestions.length - 1);
+    return this.allQuestions.slice(startIndex, endIndex + 1);
+  }
+
+  get currentIndexRange(): { start: number, last: number } {
+    const start = (this.currentPage - 1) * this.itemsPerPage + 1;
+    const last = Math.min(start + this.itemsPerPage - 1, this.allQuestions.length);
+    return { start, last };
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.allQuestions.length / this.itemsPerPage);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   openModal(modalId: string): void {
     if (this.currentModal === null) {

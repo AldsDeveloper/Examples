@@ -164,8 +164,29 @@ app.get('/fetch/question/:id', (req, res) => {
   });
 });
 
+
+
+
+
+
+
 app.post('/fetch/questions', (req, res) => {
-  console.log(res);
+  const { start, end } = req.body;
+  const query = `SELECT * FROM questions LIMIT ${end} OFFSET ${start - 1}`;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching questions:', err);
+      res.status(500).json({ error: 'An error occurred while fetching questions' });
+      return;
+    }
+
+    res.status(200).json({ questions: results });
+  });
+});
+
+
+app.get('/fetch/all/questions', (req, res) => {
   const query = 'SELECT * FROM questions';
 
   db.query(query, (err, results) => {
@@ -173,5 +194,7 @@ app.post('/fetch/questions', (req, res) => {
     res.json(results);
   });
 });
+
+
 
 app.listen(port, () => { console.log(`Server is running on port ${port}`); });
