@@ -6,6 +6,7 @@ const port = 3000;
 const cors = require('cors');
 const { log } = require('console');
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -27,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 
 const mysql = require('mysql');
+
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
@@ -37,6 +39,59 @@ db.connect((err) => {
   if (err) throw err;
   console.log('Connected to the database');
 });
+
+const pool = mysql.createPool({
+  host: '127.0.0.1',
+  user: 'root',
+  password: 'frankent',
+  database: 'exams',
+  connectionLimit: 10 
+});
+
+app.post('/auth/admin/login', async (req, res) => {
+  const { email, password, rememberMe, token } = req.body;
+
+  try {
+    // ตรวจสอบข้อมูลผู้ใช้จากฐานข้อมูล
+    pool.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+
+      if (results.length === 0) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+
+      const user = results[0];
+
+      // ตรวจสอบ password ว่าถูกต้องหรือไม่
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+
+      // ตรวจสอบ role ว่าเป็น admin หรือไม่
+      if (user.role !== 'admin') {
+        return res.status(403).json({ message: 'Forbidden' });
+      }
+
+      // บันทึกสถานะการล็อกอินใน localStorage ถ้า rememberMe เป็น true
+      if (rememberMe) {
+        await pool.query('UPDATE users SET remember_token = ? WHERE id = ?', [token, user.id]);
+      }
+
+      return res.json({ token });
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+
+
 
 
 app.post('/submit/question/multiple', async (req, res) => {
