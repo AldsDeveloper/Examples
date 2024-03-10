@@ -59,35 +59,33 @@ app.post('/auth/admin/login', async (req, res) => {
     db.query(query, [email], async (error, rows) => {
       if (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Failed to fetch user email' });
+        return res.status(200).json({ error: 'Failed to fetch user email' });
       }
       if (rows.length === 0) {
-        return res.status(500).json({ error: 'Failed to find user email' });
+        return res.status(200).json({ error: 'Failed to find user email' });
       }
 
       const user = rows[0];
 
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        return res.status(401).json({ message: 'Invalid password' });
+        return res.status(200).json({ error: 'Invalid password' });
       }
 
       if (user.role !== 'admin') {
-        return res.status(403).json({ message: 'Forbidden' });
+        return res.status(200).json({ error: 'Forbidden'});
       }
 
       const token = jwt.sign({ email: user.email, role: user.role }, 'your_secret_key', { expiresIn: '1h' });
 
-
       console.log(user);
-
 
       if (remember) {
         const queryToken = 'UPDATE user SET remember_token = ? WHERE id = ?';
 
         db.query(queryToken, [token, user.id], (error, response) => {
           if (error) {
-            return res.status(403).json({ message: 'Failed to set token in database' });
+            return res.status(200).json({ error: 'Failed to set token in database' });
           }
           return res.json({ token });
         });
@@ -97,7 +95,7 @@ app.post('/auth/admin/login', async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(200).json({ error: 'Internal Server Error' });
   }
 });
 

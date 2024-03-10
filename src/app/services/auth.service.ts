@@ -2,40 +2,46 @@ import { Injectable } from '@angular/core';
 import { TokenService } from './token.service';
 import { HttpClient } from '@angular/common/http';
 import { SigninComponent } from '../views/auth/signin/signin.component';
+import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthService {
-  private isLoggedIn: boolean = false;
+  private isAuth: boolean = false;
   private rememberMe: boolean = false;
 
-  constructor(private http: HttpClient, private tokenService: TokenService) {
-
-  }
+  constructor(private http: HttpClient, private tokenService: TokenService , private cookieService: CookieService) {}
 
   login(email: string, password: string, remember: boolean): boolean {
-
-    this.http.post<any>('http://localhost:3000/auth/admin/login', { email, password, remember}).subscribe((response) => {
-      console.log(response);
-      return
-        alert('Login successfully');
-        // location.reload();
-      }, (error) => {
+    const sub = this.http.post<any>('http://localhost:3000/auth/admin/login', { email, password, remember}).subscribe(
+      (response) => {
+        console.log(response);
+        if (response.token) {
+          this.cookieService.set('token', response.token, { expires: remember ? 365 : 1 });
+          this.isAuth = true
+        } else {
+          alert(`Failed to login: ${response.error}`);
+        }
+      },
+      (error) => {
         console.error(error);
-        alert('Failed to login');
-    });
-
+        alert('An error occurred. Please try again later.');
+        return false
+      }
+    );
     return true;
   }
 
   logout(): void {
-    this.isLoggedIn = false;
-    localStorage.setItem('isLoggedIn', JSON.stringify(this.isLoggedIn));
+    this.isAuth = false
+    this.cookieService.delete('token');
   }
 
   isAuthenticated(): boolean {
-    return this.isLoggedIn;
+    return this.isAuth;
   }
 }
