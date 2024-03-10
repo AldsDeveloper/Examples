@@ -180,35 +180,30 @@ previousPage() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+  isModalOpen: boolean = false;
 
   openModal(modalId: string): void {
-    if (this.currentModal === null) {
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.classList.remove('hidden');
-        this.currentModal = modalId;
-      }
+    const modal = document.getElementById(modalId);
+
+
+    if (modal) {
+      modal.classList.remove('hidden');
+      this.isModalOpen = true;
+      document.body.classList.add('overflow-hidden');
     }
   }
 
   closeModal(modalId: string): void {
     const modal = document.getElementById(modalId);
     if (modal) {
+      document.body.classList.remove('overflow-hidden');
       modal.classList.add('hidden');
-      this.currentModal = null;
+      this.isModalOpen = false;
+      location.reload()
     }
   }
+
+
 
 
   fetchQuestionById(id: number): void {
