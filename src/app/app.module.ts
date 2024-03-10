@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule } from '@tinymce/tinymce-angular'
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,13 +18,12 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LayoutsComponent } from './layouts/layouts.component';
 import { ComponentsComponent } from './components/components.component';
-import * as FilePond from 'filepond';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import { HttpClient } from '@angular/common/http';
 import { SigninComponent } from './views/auth/signin/signin.component';
 import { SignupComponent } from './views/auth/signup/signup.component';
 import { initAccordions, initFlowbite } from 'flowbite';
-
+import * as FilePond from 'filepond';
 
 @NgModule({
   declarations: [
