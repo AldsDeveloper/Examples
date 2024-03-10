@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const app = express();
 const port = 3000;
-const mysql = require('mysql');
 const cors = require('cors');
 const { log } = require('console');
 const fs = require('fs');
@@ -19,8 +18,15 @@ const storage = multer.diskStorage({
     cb(null, newFilename);
   }
 });
-const upload = multer({ storage: storage , limits: { fileSize: 3 * 1024 * 1024 }});
+const upload = multer({ storage: storage, limits: { fileSize: 3 * 1024 * 1024 } });
 
+app.use(cors());
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
+
+
+const mysql = require('mysql');
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
@@ -32,9 +38,54 @@ db.connect((err) => {
   console.log('Connected to the database');
 });
 
-app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
+app.post('/submit/question/multiple', async (req, res) => {
+  const selectedIds = req.body.selectedIds;
+  console.log(selectedIds);
+
+  const query = 'SELECT path FROM questions WHERE id IN (?)';
+  db.query(query, [selectedIds], async (err, results) => {
+    if (err) {
+      console.error('Error querying image paths:', err);
+      return res.status(500).send('Failed to delete questions and images');
+    }
+
+    const paths = results.map(result => result.path);
+
+    if (paths[0] !== null && paths[0] !== undefined) {
+      paths.forEach(async path => {
+        try {
+          await fs.promises.unlink('src/' + path);
+          console.log(`Deleted image at path: ${path}`);
+        } catch (err) {
+          console.error('Error deleting image:', err);
+        }
+      });
+    }
+
+    console.log(paths);
+
+    const deleteQuery = 'DELETE FROM questions WHERE id IN (?)';
+
+    db.query(deleteQuery, [selectedIds], (err, result) => {
+      if (err) {
+        console.error('Error deleting questions:', err);
+        return res.status(500).json('Failed to delete questions and images');
+      }
+
+      console.log('Deleted questions:', result.affectedRows);
+      res.status(200).json('Successfully deleted questions and images');
+    });
+  });
+});
+
+
+
+
+
+
+
+
 
 app.post('/submit/question', upload.single('file'), async (req, res) => {
   const { question, note, type } = req.body;
@@ -43,7 +94,6 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
   console.log(imagePath);
   // console.log(JSON.stringify(req.body));
   // console.log(req.file);
-  return
 
   const insertQuery = 'INSERT INTO questions (question, note, type, path) VALUES (?, ?, ?, ?)';
   const insertResult = await new Promise((resolve, reject) => {
@@ -115,11 +165,7 @@ app.post('/question/delete', (req, res) => {
 });
 
 
-app.post('/submit/question/multiple', (req, res) => {
-  const selectedIds = req.body;
-  console.log(selectedIds);
-  res.status(200).send({ message: 'Successfully deleted items' });
-});
+
 
 
 

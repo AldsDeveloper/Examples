@@ -285,21 +285,23 @@ export class DefineComponent implements AfterViewInit {
 
   deleteMultiple(): void {
     this.selectedIds = this.questions.filter(question => question.checked).map(question => question.id);
-    if (this.selectedIds[0] == null) {
-      alert('Please selected one data');
-      return
+    if (this.selectedIds.length === 0) {
+      alert('Please select at least one item');
+      return;
     }
+
     console.log(this.selectedIds);
 
-    this.http.post<any>('http://localhost:3000/submit/question/multiple', this.selectedIds).subscribe((response) => {
+    this.http.post<any>('http://localhost:3000/submit/question/multiple', { selectedIds: this.selectedIds }).subscribe((response) => {
       console.log(response);
-      alert('Form submitted successfully');
-      // location.reload()
+      alert('Items selected deleted successfully');
+      // Perform any other actions after deletion
     }, (error) => {
       console.error(error);
-      alert('Failed to submit form');
+      alert('Failed to delete selected items');
     });
   }
+
 }
 
 
