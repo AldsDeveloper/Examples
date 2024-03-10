@@ -22,6 +22,7 @@ export class AuthService {
         console.log(response);
         if (response.token) {
           this.cookieService.set('token', response.token, { expires: remember ? 365 : 1 });
+          this.cookieService.set('userId', response.userId, { expires: remember ? 365 : 1 });
           this.isAuth = true
         } else {
           alert(`Failed to login: ${response.error}`);

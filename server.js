@@ -90,7 +90,7 @@ app.post('/auth/admin/login', async (req, res) => {
           return res.json({ token });
         });
       } else {
-        return res.json({ token });
+        return res.json({ token  , userId : userId});
       }
     });
   } catch (error) {

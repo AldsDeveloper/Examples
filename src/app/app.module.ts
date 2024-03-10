@@ -17,7 +17,6 @@ import { ExamsComponent } from './views/exams/exams.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LayoutsComponent } from './layouts/layouts.component';
-import { ComponentsComponent } from './components/components.component';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import { HttpClient } from '@angular/common/http';
 import { SigninComponent } from './views/auth/signin/signin.component';
@@ -35,7 +34,6 @@ import * as FilePond from 'filepond';
     NavbarComponent,
     FooterComponent,
     LayoutsComponent,
-    ComponentsComponent,
     SigninComponent,
     SignupComponent,
   ],

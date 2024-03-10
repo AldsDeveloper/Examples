@@ -9,7 +9,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CookieService } from 'ngx-cookie-service';
 import { FooterComponent } from './components/footer/footer.component';
 import { LayoutsComponent } from './layouts/layouts.component';
-import { ComponentsComponent } from './components/components.component';
 import { SigninComponent } from './views/auth/signin/signin.component';
 import { SignupComponent } from './views/auth/signup/signup.component';
 import { DefineGuardService } from './middleware/auth.middleware';
