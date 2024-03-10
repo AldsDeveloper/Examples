@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const app = express();
 const port = 3000;
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { log } = require('console');
 const fs = require('fs');
@@ -45,53 +46,60 @@ const pool = mysql.createPool({
   user: 'root',
   password: 'frankent',
   database: 'exams',
-  connectionLimit: 10 
+  connectionLimit: 10
 });
 
-app.post('/auth/admin/login', async (req, res) => {
-  const { email, password, rememberMe, token } = req.body;
+const saltRounds = 10;
 
+app.post('/auth/admin/login', async (req, res) => {
+  const { email, password, remember } = req.body;
+  console.log(req.body);
   try {
-    // ตรวจสอบข้อมูลผู้ใช้จากฐานข้อมูล
-    pool.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
+    const query = 'SELECT * FROM user WHERE email = ?';
+    db.query(query, [email], async (error, rows) => {
       if (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Failed to fetch user email' });
+      }
+      if (rows.length === 0) {
+        return res.status(500).json({ error: 'Failed to find user email' });
       }
 
-      if (results.length === 0) {
-        return res.status(401).json({ message: 'Invalid email or password' });
-      }
+      const user = rows[0];
 
-      const user = results[0];
-
-      // ตรวจสอบ password ว่าถูกต้องหรือไม่
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        return res.status(401).json({ message: 'Invalid email or password' });
+        return res.status(401).json({ message: 'Invalid password' });
       }
 
-      // ตรวจสอบ role ว่าเป็น admin หรือไม่
       if (user.role !== 'admin') {
         return res.status(403).json({ message: 'Forbidden' });
       }
 
-      // บันทึกสถานะการล็อกอินใน localStorage ถ้า rememberMe เป็น true
-      if (rememberMe) {
-        await pool.query('UPDATE users SET remember_token = ? WHERE id = ?', [token, user.id]);
-      }
+      const token = jwt.sign({ email: user.email, role: user.role }, 'your_secret_key', { expiresIn: '1h' });
 
-      return res.json({ token });
+
+      console.log(user);
+
+
+      if (remember) {
+        const queryToken = 'UPDATE user SET remember_token = ? WHERE id = ?';
+
+        db.query(queryToken, [token, user.id], (error, response) => {
+          if (error) {
+            return res.status(403).json({ message: 'Failed to set token in database' });
+          }
+          return res.json({ token });
+        });
+      } else {
+        return res.json({ token });
+      }
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
-
-
-
 
 
 app.post('/submit/question/multiple', async (req, res) => {

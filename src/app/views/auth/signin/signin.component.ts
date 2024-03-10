@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router, RouterLink, RouterLinkActive,ActivatedRoute } from '@angular/router';
-
 
 @Component({
   selector: 'app-signin',
@@ -10,18 +8,17 @@ import { Router, RouterLink, RouterLinkActive,ActivatedRoute } from '@angular/ro
 })
 export class SigninComponent {
 
-  formData = { email: '', password: '', rememberMe: false };
+
+  user = { email: '', password: '', remember: false};
+
 
   constructor(private authService: AuthService) {}
 
-  onSubmit(event: Event): void {
-    event.preventDefault(); // ป้องกัน form ไม่ให้รีเฟรชหน้า
-
-    if (this.authService.login(this.formData.email, this.formData.password, this.formData.rememberMe)) {
+  onSubmit(): void {
+    if (this.authService.login(this.user.email, this.user.password, this.user.remember)) {
       // ล็อกอินสำเร็จ
     } else {
       // ล็อกอินไม่สำเร็จ
     }
   }
-
 }
