@@ -51,6 +51,7 @@ app.post('/submit/question/multiple', async (req, res) => {
     }
 
     const paths = results.map(result => result.path);
+    // console.log(paths);
 
     if (paths[0] !== null && paths[0] !== undefined) {
       paths.forEach(async path => {
@@ -62,9 +63,6 @@ app.post('/submit/question/multiple', async (req, res) => {
         }
       });
     }
-
-    console.log(paths);
-
     const deleteQuery = 'DELETE FROM questions WHERE id IN (?)';
 
     db.query(deleteQuery, [selectedIds], (err, result) => {

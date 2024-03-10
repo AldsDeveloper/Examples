@@ -295,7 +295,7 @@ export class DefineComponent implements AfterViewInit {
     this.http.post<any>('http://localhost:3000/submit/question/multiple', { selectedIds: this.selectedIds }).subscribe((response) => {
       console.log(response);
       alert('Items selected deleted successfully');
-      // Perform any other actions after deletion
+      location.reload();
     }, (error) => {
       console.error(error);
       alert('Failed to delete selected items');
