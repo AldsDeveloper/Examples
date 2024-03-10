@@ -19,12 +19,13 @@ export class AuthService {
   }
 
   login(email: string, password: string, rememberMe: boolean): boolean {
-    const token = this.tokenService.generateToken(email,email);
+    const token = this.tokenService.generateToken(email, 'admin');
+
+
     console.log(email);
     console.log(token);
     console.log(password);
     console.log(rememberMe);
-
 
     this.http.post<any>('http://localhost:3000/auth/admin/login', { email, password, rememberMe, token }).subscribe((response) => {
         console.log(response);
