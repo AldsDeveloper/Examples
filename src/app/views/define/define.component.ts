@@ -40,10 +40,13 @@ export class DefineComponent implements AfterViewInit {
 
   public imageUrl: string | undefined;
 
-  constructor( private http: HttpClient) { }
+  questions: any[] = [];
 
+  allQuestions: any[] = [];
 
+  currentPage: number = 1;
 
+  itemsPerPage: number = 4;
 
   pondFiles = [''];
 
@@ -53,6 +56,11 @@ export class DefineComponent implements AfterViewInit {
 
   formDataUpdate = { question: '', note: '', type: '' ,id: ''};
 
+  isModalOpen: boolean = false;
+
+  selectedIds: number[] = [];
+
+  constructor( private http: HttpClient) { }
 
   ngAfterViewInit() {
     initFlowbite();
@@ -76,21 +84,6 @@ export class DefineComponent implements AfterViewInit {
     }, 0);
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   ngOnInit(): void {
     initFlowbite();
 
@@ -98,24 +91,8 @@ export class DefineComponent implements AfterViewInit {
     this.fetchAllQuestions(); // เรียกข้อมูลทั้งหมดใน database
   }
 
-
-  questions: any[] = [];
-  allQuestions: any[] = [];
-  currentPage: number = 1;
-  itemsPerPage: number = 4;
-
-
   range(start: number, end: number): number[] {
     return Array.from({length: end - start + 1}, (_, index) => index + start);
-  }
-
-
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.fetchQuestions(this.currentPage, this.itemsPerPage);
-    }
   }
 
   fetchQuestions(page: number, limit: number) {
@@ -129,36 +106,34 @@ export class DefineComponent implements AfterViewInit {
     });
   }
 
-
-
-
-
   setCurrentPage(page: number) {
     this.currentPage = page;
     this.fetchQuestions(this.currentPage, this.itemsPerPage);
   }
 
-
-
-fetchAllQuestions() {
-  this.http.get('http://localhost:3000/fetch/all/questions').subscribe((response: any) => {
-    this.allQuestions = response;
-    this.fetchQuestions(this.currentPage, this.itemsPerPage);
-  }, error => {
-    console.error('Error fetch all questions:', error);
-    alert('Error fetch all questions!');
-  });
-}
-
-previousPage() {
+  previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.fetchQuestions(this.currentPage, this.itemsPerPage);
     }
-}
+  }
 
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.fetchQuestions(this.currentPage, this.itemsPerPage);
+    }
+  }
 
-
+  fetchAllQuestions() {
+    this.http.get('http://localhost:3000/fetch/all/questions').subscribe((response: any) => {
+      this.allQuestions = response;
+      this.fetchQuestions(this.currentPage, this.itemsPerPage);
+    }, error => {
+      console.error('Error fetch all questions:', error);
+      alert('Error fetch all questions!');
+    });
+  }
 
   get currentPageQuestions(): any[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
@@ -175,12 +150,6 @@ previousPage() {
   get totalPages(): number {
     return Math.ceil(this.allQuestions.length / this.itemsPerPage);
   }
-
-
-
-
-
-  isModalOpen: boolean = false;
 
   openModal(modalId: string): void {
     const modal = document.getElementById(modalId);
@@ -203,9 +172,6 @@ previousPage() {
     }
   }
 
-
-
-
   fetchQuestionById(id: number): void {
     this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
         this.fillEditModal(response);
@@ -215,7 +181,7 @@ previousPage() {
     });
   }
 
-fillEditModal(response: any): void {
+  fillEditModal(response: any): void {
   console.log(response.path);
 
   this.formDataUpdate = {
@@ -308,18 +274,14 @@ fillEditModal(response: any): void {
     );
   }
 
-  selectedIds: number[] = [];
-
   checkAll(): void {
     const allChecked = this.questions.every(question => question.checked);
     this.questions.forEach(question => question.checked = !allChecked);
   }
 
-
   uncheckAll(): void {
     this.questions.forEach(question => question.checked = false);
   }
-
 
   deleteMultiple(): void {
     this.selectedIds = this.questions.filter(question => question.checked).map(question => question.id);
@@ -328,10 +290,8 @@ fillEditModal(response: any): void {
       return
     }
     console.log(this.selectedIds);
-    // ตอนนี้ SelectedIds ข้อมูลเข้าแล้ว
-    // return
 
-    this.http.post<any>('http://localhost:3000/submit/question', this.selectedIds).subscribe((response) => {
+    this.http.post<any>('http://localhost:3000/submit/question/multiple', this.selectedIds).subscribe((response) => {
       console.log(response);
       alert('Form submitted successfully');
       // location.reload()
@@ -340,8 +300,6 @@ fillEditModal(response: any): void {
       alert('Failed to submit form');
     });
   }
-
-
 }
 
 

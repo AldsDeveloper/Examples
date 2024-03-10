@@ -115,8 +115,10 @@ app.post('/question/delete', (req, res) => {
 });
 
 
-app.post('/question/delete/multiple', (req, res) => {
-  console.log(req.body);
+app.post('/submit/question/multiple', (req, res) => {
+  const selectedIds = req.body;
+  console.log(selectedIds);
+  res.status(200).send({ message: 'Successfully deleted items' });
 });
 
 
