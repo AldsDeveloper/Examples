@@ -12,6 +12,7 @@ import { LayoutsComponent } from './layouts/layouts.component';
 import { SigninComponent } from './views/auth/signin/signin.component';
 import { SignupComponent } from './views/auth/signup/signup.component';
 import { DefineGuardService } from './middleware/auth.middleware';
+import { AuthService } from './services/auth.service';
 
 const routes: Routes = [
   { path: "exams/:userId", title:"Exams", component: ExamsComponent },

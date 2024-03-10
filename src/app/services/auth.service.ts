@@ -37,9 +37,11 @@ export class AuthService {
     return true;
   }
 
-  logout(): void {
-    this.isAuth = false
+  logout(): boolean {
+    this.isAuth = false;
     this.cookieService.delete('token');
+    alert('You have logged out already');
+    return true
   }
 
   isAuthenticated(): boolean {

@@ -18,6 +18,7 @@ import { registerPlugin } from 'filepond';
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { log } from 'console';
+import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
 FilePond.registerPlugin(FilePondPluginImageCrop);
 FilePond.registerPlugin(FilePondPluginImagePreview);
 @Component({
