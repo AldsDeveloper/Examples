@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/examples",
+            "outputPath": "dist/Examples",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -46,13 +46,13 @@
             ],
 
             "scripts": [
-              "node_modules/filepond/dist/filepond.min.js"
+              "node_modules/ace-builds/src-min/ace.js",
+              "node_modules/filepond/dist/filepond.min.js",
+              "node_modules/monaco-editor/min/vs/loader.js"
             ],
             "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "prerender": false,
+            "ssr": false
           },
           "configurations": {
             "production": {
@@ -110,11 +110,9 @@
               "src/assets",
               "src/assets/uploads",
               "node_modules/flowbite/plugin.d.ts",
-              {
-                "glob": "**/*",
-                "input": "src/assets/uploads",
-                "output": "/assets/uploads/"
-              }
+              { "glob": "**/*","input": "src/assets/uploads","output": "/assets/uploads/" },
+              { "glob": "**/*","input": "node_modules/flowbite/plugin","output": "./tailwind.config.js" },
+              { "glob": "**/*", "input": "node_modules/monaco-editor", "output": "assets/monaco-editor" }
             ],
             "styles": [
               "src/styles.scss"

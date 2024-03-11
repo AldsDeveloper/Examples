@@ -139,7 +139,20 @@ app.post('/submit/question/multiple', async (req, res) => {
 });
 
 
+app.post('/submit/answers', (req, res) => {
+  const { userId, answers } = req.body;
+  // return
+  console.log('Received answers from user:', userId, answers);
 
+  const query = 'INSERT INTO answer (name, answer) VALUES (?, ?) ON DUPLICATE KEY UPDATE answer = ?';
+  const values = [userId, JSON.stringify(answers), JSON.stringify(answers)];
+
+  db.query(query, values, (err, result) => {
+    if (err) throw err;
+    console.log('Answers saved in database for user:', userId);
+    res.status(200).json({ message: 'Answers received and saved' });
+  });
+});
 
 
 
@@ -255,6 +268,12 @@ app.post('/fetch/questions/exams', (req, res) => {
     res.status(200).json({ questions: results });
   });
 });
+
+
+// app.get('assets/monaco/min/vs/loader.js', (req, res) => {
+//   res.set('Content-Type', 'application/javascript');
+//   // ตอบกลับไฟล์ loader.js ที่ถูกต้อง
+// });
 
 
 

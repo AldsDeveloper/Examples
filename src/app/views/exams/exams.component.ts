@@ -8,6 +8,7 @@ import { AfterViewInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
+
 @Component({
   selector: 'app-exams',
   templateUrl: './exams.component.html',
@@ -22,7 +23,7 @@ export class ExamsComponent implements OnInit {
   currentQuestionIndex: number = 0;
   isSubmitted: boolean = false;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient , private router: Router) { }
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('userId');
@@ -59,10 +60,6 @@ export class ExamsComponent implements OnInit {
 
   submitForm(): void {
     this.unansweredIndex = this.questions.findIndex(question => !question.answer.trim());
-
-
-
-
     if (this.unansweredIndex !== -1) {
       alert(`You have not answered question ${this.unansweredIndex + 1}`);
       this.currentQuestionIndex = this.unansweredIndex;
@@ -72,11 +69,13 @@ export class ExamsComponent implements OnInit {
         answers: this.questions.map(q => q.answer)
       };
       console.log(payload);
-      return
+
+
 
       this.http.post('http://localhost:3000/submit/answers', payload).subscribe(response => {
         console.log('Server response:', response);
         alert('Form submitted!');
+        this.router.navigate(['/']);
       }, error => {
         console.error('Error submitting form:', error);
         alert('Error submitting form!');
@@ -84,5 +83,11 @@ export class ExamsComponent implements OnInit {
     }
   }
 
+  code: string = '';
+  editorOptions = { theme: 'vs-dark', language: 'typescript' };
 
+  submit() {
+    // ทำสิ่งที่ต้องการเมื่อผู้ใช้กด Submit
+    console.log('Code submitted:', this.code);
+  }
 }
