@@ -17,8 +17,8 @@ import { FilePondModule } from 'ngx-filepond';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { SigninComponent } from './views/auth/signin/signin.component';
 import { SignupComponent } from './views/auth/signup/signup.component';
-
 import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
+import { ResultComponent } from './views/result/result.component';
 
 
 @NgModule({
@@ -33,6 +33,7 @@ import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
     LayoutsComponent,
     SigninComponent,
     SignupComponent,
+    ResultComponent,
   ],
   imports: [
     BrowserModule,
