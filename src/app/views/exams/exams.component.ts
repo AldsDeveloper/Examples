@@ -1,4 +1,4 @@
-import { Component, OnInit ,NgModule } from '@angular/core';
+import { Component, OnInit ,NgModule, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive,ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -6,7 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AfterViewInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
-import { ViewChild } from '@angular/core';
+import { filter, take } from 'rxjs/operators';
+import { MonocoEditor } from '../../services/ngx.monoco';
+import { MonacoEditorComponent, MonacoEditorConstructionOptions, MonacoEditorLoaderService, MonacoStandaloneCodeEditor} from '@materia-ui/ngx-monaco-editor';
 
 
 @Component({
@@ -18,12 +20,25 @@ import { ViewChild } from '@angular/core';
 export class ExamsComponent implements OnInit {
 
   unansweredIndex: number = -1;
-  questions: { question: string; answer: string; path: string; type: string; note: string; }[] = [];
+  questions: {
+              question: string;
+              answer: string;
+              path: string;
+              type: string;
+              note: string;
+  }[] = [];
   userId: any;
   currentQuestionIndex: number = 0;
   isSubmitted: boolean = false;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient , private router: Router) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient , private router: Router,private monacoLoaderService: MonacoEditorLoaderService,) { }
+
+  @ViewChild(MonacoEditorComponent, { static: false })
+  monacoComponent: MonacoEditorComponent;
+
+  editorOptions: MonacoEditorConstructionOptions = {
+    theme: 'vs-dark', language: 'javascript'
+  };
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('userId');
@@ -69,8 +84,7 @@ export class ExamsComponent implements OnInit {
         answers: this.questions.map(q => q.answer)
       };
       console.log(payload);
-
-
+      // return
 
       this.http.post('http://localhost:3000/submit/answers', payload).subscribe(response => {
         console.log('Server response:', response);
@@ -83,11 +97,5 @@ export class ExamsComponent implements OnInit {
     }
   }
 
-  code: string = '';
-  editorOptions = { theme: 'vs-dark', language: 'typescript' };
 
-  submit() {
-    // ทำสิ่งที่ต้องการเมื่อผู้ใช้กด Submit
-    console.log('Code submitted:', this.code);
-  }
 }

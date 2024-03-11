@@ -21,6 +21,7 @@
     "@angular/platform-server": "^17.2.0",
     "@angular/router": "^17.2.0",
     "@angular/ssr": "^17.2.2",
+    "@materia-ui/ngx-monaco-editor": "^6.0.0",
     "@ngstack/code-editor": "^7.2.0",
     "@tinymce/tinymce-angular": "^7.0.0",
     "ace-builds": "^1.32.7",

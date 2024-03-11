@@ -18,6 +18,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SigninComponent } from './views/auth/signin/signin.component';
 import { SignupComponent } from './views/auth/signup/signup.component';
 
+import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
 
 
 @NgModule({
@@ -39,12 +40,17 @@ import { SignupComponent } from './views/auth/signup/signup.component';
     CommonModule,
     FormsModule,
     HttpClientModule,
+    MonacoEditorModule,
     ReactiveFormsModule,
     EditorModule,
     FilePondModule,
 
   ],
   providers: [
+    {
+      provide: MONACO_PATH,
+      useValue: 'https://unpkg.com/monaco-editor@0.30.1/min/vs',
+    },
   ],
   bootstrap: [
     AppComponent,
