@@ -242,8 +242,19 @@ app.get('/fetch/question/:id', (req, res) => {
   });
 });
 
+app.post('/fetch/questions/exams', (req, res) => {
+  const query = `SELECT * FROM questions`;
 
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching questions exams:', err);
+      res.status(500).json({ error: 'An error occurred while fetching questions' });
+      return;
+    }
 
+    res.status(200).json({ questions: results });
+  });
+});
 
 
 
