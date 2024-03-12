@@ -74,11 +74,11 @@ export class DefineComponent implements AfterViewInit {
 
     setTimeout(() => {
       const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
-      pond.on('addfile', (error, file) => {
+      pond.on('addfile' , (error, file) => {
         if (error) {
-          console.log('File Upload Error: ', error);
+          console.log('File has pick Error: ', error);
         } else {
-          console.log('File Uploaded', file);
+          console.log('File has picked', file);
           this.uploadedFile = file.file;
         }
       });
@@ -89,7 +89,7 @@ export class DefineComponent implements AfterViewInit {
     initFlowbite();
 
     this.fetchQuestions(1, this.itemsPerPage);
-    this.fetchAllQuestions(); // เรียกข้อมูลทั้งหมดใน database
+    this.fetchAllQuestions();
   }
 
   range(start: number, end: number): number[] {
@@ -154,8 +154,6 @@ export class DefineComponent implements AfterViewInit {
 
   openModal(modalId: string): void {
     const modal = document.getElementById(modalId);
-
-
     if (modal) {
       modal.classList.remove('hidden');
       this.isModalOpen = true;
@@ -169,9 +167,18 @@ export class DefineComponent implements AfterViewInit {
       document.body.classList.remove('overflow-hidden');
       modal.classList.add('hidden');
       this.isModalOpen = false;
-      location.reload()
+
+      const pondElement = modal.querySelector('#findpondedit');
+      // console.log(pondElement)
+      if (pondElement) {
+        const pond = FilePond.find(pondElement);
+        if (pond) {
+          pond.destroy();
+        }
+      }
     }
   }
+
 
   fetchQuestionById(id: number): void {
     this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
@@ -183,25 +190,25 @@ export class DefineComponent implements AfterViewInit {
   }
 
   fillEditModal(response: any): void {
-  console.log(response.path);
+    console.log(response.path);
 
-  this.formDataUpdate = {
-    id: response.id,
-    question: response.question,
-    note: response.note,
-    type: response.type
-  };
+    this.formDataUpdate = {
+      id: response.id,
+      question: response.question,
+      note: response.note,
+      type: response.type
+    };
 
 
-  const pondEdit = FilePond.create(this.filepondedit.nativeElement);
-  pondEdit.removeFiles();
-  pondEdit.addFile(response.path).then((fileupdate) => {
-    console.log('File Added', fileupdate);
-    this.updatedFile = fileupdate.file as File;
-    this.openModal('edit-modal');
-  }).catch((error) => {
-    console.error('File Add Error:', error);
-  });
+    const pondEdit = FilePond.create(this.filepondedit.nativeElement);
+    pondEdit.removeFiles();
+    pondEdit.addFile(response.path).then((fileupdate) => {
+      console.log('File Added', fileupdate);
+      this.updatedFile = fileupdate.file as File;
+      this.openModal('edit-modal');
+    }).catch((error) => {
+      console.error('File Add Error:', error);
+    });
 }
 
   pondHandleInit() {

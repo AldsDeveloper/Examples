@@ -182,10 +182,6 @@
   </div>
 </div>
 
-<style>
-
-</style>
-
 <!-- EDIT MODAL -->
 <div id="edit-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden flex fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
   <div class="relative w-full max-w-md max-h-full p-4">
@@ -223,7 +219,7 @@
             </div>
             <div class="col-span-2">
               <label for="file" class="block mb-2 text-sm font-medium text-gray-900">File</label>
-              <input  #filepondedit [value]="" type="file" name="file-update" [files]="pondFiles" acceptedFileTypes="image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
+              <input  #filepondedit id="findpondedit" [value]="" type="file" name="file-update" [files]="pondFiles" acceptedFileTypes="image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
               <!-- <file-pond  #filepondedit type="file" [files]="pondFiles" acceptedFileTypes="image/jpeg, image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
               </file-pond> -->
               <!-- </inpu> -->
@@ -239,9 +235,4 @@
     </div>
   </div>
 </div>
-
-
-<div  (click)="closeModal('edit-modal')" class="fixed inset-0 z-40 bg-gray-900/50 dark:bg-gray-900/80" [ngClass]="{'hidden': !isModalOpen}"></div>
-
-
-<script src="./assets/js/flowbite/flowbite.js"></script>
+<div  (click)="closeModal('edit-modal')" *ngIf="!isModalOpen" class="fixed inset-0 z-40 hiddem bg-gray-900/50" [ngClass]="{'hidden': !isModalOpen}"></div>
