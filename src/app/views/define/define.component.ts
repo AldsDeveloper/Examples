@@ -66,6 +66,7 @@ export class DefineComponent implements AfterViewInit {
 
   selectedIds: number[] = [];
 
+  // id: any;
 
   constructor( private http: HttpClient) { }
 
@@ -202,8 +203,6 @@ export class DefineComponent implements AfterViewInit {
 
   public pondOptions: any;
 
-
-
   fillEditModal(response: any): void {
     console.log(response.path);
     this.formDataUpdate = {
@@ -215,9 +214,6 @@ export class DefineComponent implements AfterViewInit {
     this.pondOptions = {
       allowReorder: true,
       maxFileSize: '5MB',
-      stylePanelAspectRatio: 1,
-      allowMultiple: false,
-      maxFiles: 1,
       allowRevert: false
     };
 
@@ -297,6 +293,12 @@ export class DefineComponent implements AfterViewInit {
 
 
   submitFormUpdate(): void {
+
+    if (!this.formData.question || !this.formData.note || !this.formData.type) {
+      alert('Please fill in all fields and select a file');
+      return;
+    }
+
     const formDataUpdate = new FormData();
     formDataUpdate.append('question_update', this.formDataUpdate.question);
     formDataUpdate.append('note_update', this.formDataUpdate.note);
