@@ -167,6 +167,7 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
     imagePath = `assets/uploads/${req.file.filename}`;
   }
 
+
   const insertQuery = 'INSERT INTO questions (question, note, type, path) VALUES (?, ?, ?, ?)';
   const insertParams = [question, note, type, imagePath];
 

@@ -66,6 +66,10 @@ export class DefineComponent implements AfterViewInit {
 
   selectedIds: number[] = [];
 
+  public pondOptions: any;
+
+  submitted: boolean = false;
+
   // id: any;
 
   constructor( private http: HttpClient) { }
@@ -201,8 +205,6 @@ export class DefineComponent implements AfterViewInit {
   }
 
 
-  public pondOptions: any;
-
   fillEditModal(response: any): void {
     console.log(response.path);
     this.formDataUpdate = {
@@ -259,7 +261,6 @@ export class DefineComponent implements AfterViewInit {
     console.log('A file was added', event.file.filename);
   }
 
-  submitted: boolean = false;
 
   submitForm(): void {
 
