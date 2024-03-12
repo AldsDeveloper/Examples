@@ -58,7 +58,7 @@ export class DefineComponent implements AfterViewInit {
 
   currentModal: string | null = null;
 
-  formData = { question: '', note: '', type: 'true' };
+  formData = { question: null, note: null, type: 'true' };
 
   formDataUpdate = { question: '', note: '', type: '' ,id: ''};
 
@@ -263,7 +263,15 @@ export class DefineComponent implements AfterViewInit {
     console.log('A file was added', event.file.filename);
   }
 
+  submitted: boolean = false;
+
   submitForm(): void {
+
+    if (!this.formData.question || !this.formData.note || !this.formData.type) {
+      alert('Please fill in all fields and select a file');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('question', this.formData.question);
     formData.append('note', this.formData.note);
@@ -271,10 +279,11 @@ export class DefineComponent implements AfterViewInit {
 
     if (this.uploadedFile) {
       formData.append('file', this.uploadedFile);
-    } else {
-      console.log('No file selected');
-      return;
     }
+    // else {
+    //   console.log('No file selected');
+    //   return;
+    // }
     this.http.post<any>('http://localhost:3000/submit/question', formData).subscribe((response) => {
       console.log(response);
       alert('Form submitted successfully');
@@ -284,6 +293,8 @@ export class DefineComponent implements AfterViewInit {
       alert('Failed to submit form');
     });
   }
+
+
 
   submitFormUpdate(): void {
     const formDataUpdate = new FormData();
@@ -353,7 +364,6 @@ export class DefineComponent implements AfterViewInit {
       alert('Failed to delete selected items');
     });
   }
-
 }
 
 

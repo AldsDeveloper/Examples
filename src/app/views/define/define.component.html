@@ -149,36 +149,35 @@
                 <span class="sr-only">Close modal</span>
               </button>
         </div>
-        <form class="p-4 md:p-5">
+        <form class="p-4 md:p-5" #createForm="ngForm">
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div class="col-span-2">
               <label for="question" class="block mb-2 text-sm font-medium text-gray-900">Question</label>
-              <textarea id="question" name="question" [(ngModel)]="formData.question" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here"></textarea>
-              <p for="remind-text" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
+              <textarea id="question" name="question" [(ngModel)]="formData.question" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here" required #question="ngModel"></textarea>
+              <p *ngIf="question.invalid && (question.dirty || question.touched)" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
             </div>
             <div class="col-span-2">
               <label for="note" class="block mb-2 text-sm font-medium text-gray-900">Note</label>
-              <input type="text" name="note" id="note" [(ngModel)]="formData.note" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Type product name" required="">
-              <p for="file" id="remind-text" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
+              <input type="text" name="note" id="note" [(ngModel)]="formData.note" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Type product name" required #note="ngModel">
+              <p *ngIf="note.invalid && (note.dirty || note.touched)" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
             </div>
             <div class="col-span-2">
               <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Answer Type</label>
-              <select id="type" name="type" [(ngModel)]="formData.type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+              <select id="type" name="type" [(ngModel)]="formData.type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  " required #type="ngModel">
                 <option selected value="true">Text</option>
                 <option value="false">Code Editor</option>
               </select>
-              <p for="remind-text" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
+              <p *ngIf="type.invalid && (type.dirty || type.touched)" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
             </div>
             <div class="col-span-2">
               <label for="file" class="block mb-2 text-sm font-medium text-gray-900">File</label>
-              <input #filepond id="filepond" type="file"  class="filepond" name="filepond" acceptedFileTypes="image/png"  data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
-              <input #filepond id="filepond" type="file" class="filepond" name="filepond" acceptedFileTypes="image/png" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3" style="height: 300px;">
+              <input #filepond id="filepond" type="file" class="filepond" name="filepond" acceptedFileTypes="image/png" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3" required>
             </div>
           </div>
           <div class="flex justify-center">
-            <button (click)="submitForm()" class="text-white inline-flex items-center bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+            <button (click)="submitForm()" [disabled]="createForm.invalid" class="text-white inline-flex items-center bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
               <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-              Add new product
+              CREATE
             </button>
           </div>
         </form>

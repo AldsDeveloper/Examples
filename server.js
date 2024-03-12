@@ -99,6 +99,7 @@ app.post('/auth/admin/login', async (req, res) => {
   }
 });
 
+
 app.post('/submit/question/multiple', async (req, res) => {
   const selectedIds = req.body.selectedIds;
   console.log(selectedIds);
@@ -137,6 +138,7 @@ app.post('/submit/question/multiple', async (req, res) => {
   });
 });
 
+
 app.post('/submit/answers', (req, res) => {
   const { userId, answers } = req.body;
   // return
@@ -152,22 +154,30 @@ app.post('/submit/answers', (req, res) => {
   });
 });
 
+
+
+
+
+
 app.post('/submit/question', upload.single('file'), async (req, res) => {
   const { question, note, type } = req.body;
-  const imagePath = `assets/uploads/${req.file.filename}`;
+  let imagePath = null;
 
-  console.log(imagePath);
-  // console.log(JSON.stringify(req.body));
-  // console.log(req.file);
+  if (req.file) {
+    imagePath = `assets/uploads/${req.file.filename}`;
+  }
 
   const insertQuery = 'INSERT INTO questions (question, note, type, path) VALUES (?, ?, ?, ?)';
-  const insertResult = await new Promise((resolve, reject) => {
-    db.query(insertQuery, [question, note, type, imagePath], (error, results, fields) => {
-      if (error) reject(error);
-      resolve(results);
-    });
+  const insertParams = [question, note, type, imagePath];
+
+  db.query(insertQuery, insertParams, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send('Failed to insert question');
+    }
+    console.log('Question inserted successfully');
+    res.status(200).json({ message: 'Question inserted successfully'});
   });
-  res.send(JSON.stringify(insertResult));
 });
 
 app.post('/submit/question/update', upload.single('file-update'), async (req, res) => {
@@ -179,10 +189,6 @@ app.post('/submit/question/update', upload.single('file-update'), async (req, re
     const newFilename = `${uniqueId}.png`;
     const imagePath = `assets/uploads/${newFilename}`;
 
-    console.log(req.body)
-    console.log(uniqueId)
-    console.log(imagePath)
-    return
 
 
     const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
@@ -233,11 +239,6 @@ app.post('/question/delete', (req, res) => {
   });
 });
 
-
-
-
-
-
 app.get('/fetch/question/:id', (req, res) => {
   const id = req.params.id;
   const query = 'SELECT * FROM questions WHERE id = ?';
@@ -265,15 +266,6 @@ app.post('/fetch/questions/exams', (req, res) => {
     res.status(200).json({ questions: results });
   });
 });
-
-
-// app.get('assets/monaco/min/vs/loader.js', (req, res) => {
-//   res.set('Content-Type', 'application/javascript');
-//   // ตอบกลับไฟล์ loader.js ที่ถูกต้อง
-// });
-
-
-
 
 app.post('/fetch/questions', (req, res) => {
   const { start, end } = req.body;
