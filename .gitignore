@@ -8,7 +8,7 @@
 
 # Node
 /node_modules/*
-/angular-electron/*
+angular-electron
 npm-debug.log
 yarn-error.log
 
