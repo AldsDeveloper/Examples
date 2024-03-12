@@ -182,8 +182,8 @@ app.post('/submit/question', upload.single('file'), async (req, res) => {
 
 app.post('/submit/question/update', upload.single('file-update'), async (req, res) => {
   try {
-    // console.log(req.file);
-    // return
+    console.log(req.file);
+
     const { id, question_update, note_update, type_update } = req.body;
 
     let imagePath = null;
@@ -191,17 +191,19 @@ app.post('/submit/question/update', upload.single('file-update'), async (req, re
     if (req.file) {
       const uniqueId = Math.random().toString(36).substr(2, 15);
       const newFilename = `${uniqueId}.png`;
-      const imagePath = `assets/uploads/${newFilename}`;
+      imagePath = `assets/uploads/${newFilename}`;
+
+      console.log(imagePath);
     }
 
-    const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
-    const insertResult = await new Promise((resolve, reject) => {
-      db.query(insertQuery, [question_update, note_update, type_update, imagePath, id], (error, results, fields) => {
+    const updateQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
+    const updateResult = await new Promise((resolve, reject) => {
+      db.query(updateQuery, [question_update, note_update, type_update, imagePath, id], (error, results, fields) => {
         if (error) reject(error);
         resolve(results);
       });
     });
-    res.send(JSON.stringify(insertResult));
+    res.send(JSON.stringify(updateResult));
   } catch (error) {
     console.error(error);
     res.status(500).send('Failed to update question');

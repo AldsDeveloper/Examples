@@ -299,6 +299,7 @@ export class DefineComponent implements AfterViewInit {
       return;
     }
 
+
     const formDataUpdate = new FormData();
     formDataUpdate.append('question_update', this.formDataUpdate.question);
     formDataUpdate.append('note_update', this.formDataUpdate.note);
@@ -320,7 +321,7 @@ export class DefineComponent implements AfterViewInit {
     this.http.post<any>('http://localhost:3000/submit/question/update', formDataUpdate).subscribe((response) => {
       console.log(response);
       alert('Form updated successfully');
-      // location.reload()
+      location.reload()
     }, (error) => {
       console.error(error);
       alert('Failed to submit form');
