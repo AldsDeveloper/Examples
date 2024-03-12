@@ -12,13 +12,18 @@ import { FormControl } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { Injectable } from '@angular/core';
-import * as FilePond from 'filepond';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import { registerPlugin } from 'filepond';
-import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { log } from 'console';
+import { exit } from 'process';
+
+import * as FilePond from 'filepond';
+import { registerPlugin } from 'filepond';
 import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
+import FilePondPluginImageValidateSize from 'filepond-plugin-image-validate-size';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+FilePond.registerPlugin(FilePondPluginImageCrop);
+FilePond.registerPlugin(FilePondPluginImageValidateSize);
 FilePond.registerPlugin(FilePondPluginImageCrop);
 FilePond.registerPlugin(FilePondPluginImagePreview);
 @Component({
@@ -61,19 +66,22 @@ export class DefineComponent implements AfterViewInit {
 
   selectedIds: number[] = [];
 
+
   constructor( private http: HttpClient) { }
 
   ngAfterViewInit() {
     initFlowbite();
 
     const pondOptions = {
-      allowReorder: true,
+      allowReorder: false,
       maxFileSize: '5MB',
-      maxFiles: 3
+      acceptedFileTypes: 'image/png',
+      allowMultiple: false,
+
     };
 
     setTimeout(() => {
-      const pond = FilePond.create(this.filepond.nativeElement, pondOptions);
+      const pond = FilePond.create(this.filepond.nativeElement, this.pondOptions);
       pond.on('addfile' , (error, file) => {
         if (error) {
           console.log('File has pick Error: ', error);
@@ -169,47 +177,83 @@ export class DefineComponent implements AfterViewInit {
       this.isModalOpen = false;
 
       const pondElement = modal.querySelector('#findpondedit');
-      // console.log(pondElement)
       if (pondElement) {
         const pond = FilePond.find(pondElement);
         if (pond) {
           pond.destroy();
+          console.log('File has removed',pond);
+
         }
       }
     }
   }
 
-
   fetchQuestionById(id: number): void {
     this.http.get<any>(`http://localhost:3000/fetch/question/${id}`).subscribe((response: any) => {
-        this.fillEditModal(response);
+      this.fillEditModal(response);
+      console.log('fetch question by id',response);
+
     }, error => {
         console.error('Error fetching question:', error);
         alert('Error fetching question!');
     });
   }
 
+
+  public pondOptions: any;
+
+
+
   fillEditModal(response: any): void {
     console.log(response.path);
-
     this.formDataUpdate = {
       id: response.id,
       question: response.question,
       note: response.note,
       type: response.type
     };
+    this.pondOptions = {
+      allowReorder: true,
+      maxFileSize: '5MB',
+      stylePanelAspectRatio: 1,
+      allowMultiple: false,
+      maxFiles: 1,
+      allowRevert: false
+    };
 
-
-    const pondEdit = FilePond.create(this.filepondedit.nativeElement);
-    pondEdit.removeFiles();
-    pondEdit.addFile(response.path).then((fileupdate) => {
-      console.log('File Added', fileupdate);
-      this.updatedFile = fileupdate.file as File;
+    const pondEdit = FilePond.create(this.filepondedit.nativeElement,this.pondOptions);
+    if (response.path) {
       this.openModal('edit-modal');
-    }).catch((error) => {
-      console.error('File Add Error:', error);
-    });
-}
+      pondEdit.on(('addfile'), (error, file) => {
+        if (error) {
+          console.log('File has pick Error: ', error);
+        } else {
+          console.log('File has picked', file);
+          this.updatedFile = file.file as File;
+
+        }
+      });
+        pondEdit.addFile(response.path).then((fileupdate) => {
+        console.log('File has pick  ', fileupdate);
+        this.updatedFile = fileupdate.file as File;
+
+      }).catch((error) => {
+        console.error('File Add Error:', error);
+      });
+
+    }
+    if (!response.path) {
+      pondEdit.on(('addfile'), (error, file) => {
+        if (error) {
+          console.log('File has pick Error: ', error);
+        } else {
+          console.log('File has picked', file);
+          this.updatedFile = file.file as File;
+        }
+      });
+      this.openModal('edit-modal');
+    }
+  }
 
   pondHandleInit() {
     console.log('FilePond has initialised', this.filepond);
@@ -255,13 +299,13 @@ export class DefineComponent implements AfterViewInit {
       return;
     }
     console.log('Form data EDIT:', this.formDataUpdate);
-    console.log('File darta EDIT:', this.updatedFile);
+    console.log('File data EDIT:', this.updatedFile);
     // return
 
     this.http.post<any>('http://localhost:3000/submit/question/update', formDataUpdate).subscribe((response) => {
       console.log(response);
       alert('Form updated successfully');
-      location.reload()
+      // location.reload()
     }, (error) => {
       console.error(error);
       alert('Failed to submit form');
@@ -311,5 +355,6 @@ export class DefineComponent implements AfterViewInit {
   }
 
 }
+
 
 

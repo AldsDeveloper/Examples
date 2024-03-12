@@ -99,7 +99,6 @@ app.post('/auth/admin/login', async (req, res) => {
   }
 });
 
-
 app.post('/submit/question/multiple', async (req, res) => {
   const selectedIds = req.body.selectedIds;
   console.log(selectedIds);
@@ -138,7 +137,6 @@ app.post('/submit/question/multiple', async (req, res) => {
   });
 });
 
-
 app.post('/submit/answers', (req, res) => {
   const { userId, answers } = req.body;
   // return
@@ -153,11 +151,6 @@ app.post('/submit/answers', (req, res) => {
     res.status(200).json({ message: 'Answers received and saved' });
   });
 });
-
-
-
-
-
 
 app.post('/submit/question', upload.single('file'), async (req, res) => {
   const { question, note, type } = req.body;
@@ -186,6 +179,10 @@ app.post('/submit/question/update', upload.single('file-update'), async (req, re
     const newFilename = `${uniqueId}.png`;
     const imagePath = `assets/uploads/${newFilename}`;
 
+    console.log(req.body)
+    console.log(uniqueId)
+    console.log(imagePath)
+    return
 
 
     const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';

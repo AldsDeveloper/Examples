@@ -154,10 +154,12 @@
             <div class="col-span-2">
               <label for="question" class="block mb-2 text-sm font-medium text-gray-900">Question</label>
               <textarea id="question" name="question" [(ngModel)]="formData.question" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here"></textarea>
+              <p for="remind-text" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
             </div>
             <div class="col-span-2">
               <label for="note" class="block mb-2 text-sm font-medium text-gray-900">Note</label>
               <input type="text" name="note" id="note" [(ngModel)]="formData.note" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Type product name" required="">
+              <p for="file" id="remind-text" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
             </div>
             <div class="col-span-2">
               <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Answer Type</label>
@@ -165,10 +167,12 @@
                 <option selected value="true">Text</option>
                 <option value="false">Code Editor</option>
               </select>
+              <p for="remind-text" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
             </div>
             <div class="col-span-2">
               <label for="file" class="block mb-2 text-sm font-medium text-gray-900">File</label>
-              <input #filepond type="file"  class="filepond" name="filepond"  data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
+              <input #filepond id="filepond" type="file"  class="filepond" name="filepond" acceptedFileTypes="image/png"  data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
+              <input #filepond id="filepond" type="file" class="filepond" name="filepond" acceptedFileTypes="image/png" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3" style="height: 300px;">
             </div>
           </div>
           <div class="flex justify-center">
@@ -219,7 +223,7 @@
             </div>
             <div class="col-span-2">
               <label for="file" class="block mb-2 text-sm font-medium text-gray-900">File</label>
-              <input  #filepondedit id="findpondedit" [value]="" type="file" name="file-update" [files]="pondFiles" acceptedFileTypes="image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
+              <input  #filepondedit id="findpondedit" [value]="" type="file" name="file-update" [files]="pondFiles" acceptedFileTypes="image/png"  (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
               <!-- <file-pond  #filepondedit type="file" [files]="pondFiles" acceptedFileTypes="image/jpeg, image/png"   (oninit)="pondHandleInit()" (onaddfile)="pondHandleAddFile($event)" class="filepond-edit" name="filepond-edit" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="3">
               </file-pond> -->
               <!-- </inpu> -->
