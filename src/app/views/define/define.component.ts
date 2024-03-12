@@ -294,7 +294,7 @@ export class DefineComponent implements AfterViewInit {
 
   submitFormUpdate(): void {
 
-    if (!this.formData.question || !this.formData.note || !this.formData.type) {
+    if (!this.formDataUpdate.question || !this.formDataUpdate.note || !this.formDataUpdate.type ) {
       alert('Please fill in all fields and select a file');
       return;
     }
@@ -307,10 +307,12 @@ export class DefineComponent implements AfterViewInit {
 
     if (this.updatedFile) {
       formDataUpdate.append('file-update', this.updatedFile);
-    } else {
-      console.log('No file selected');
-      return;
     }
+    // else {
+      // console.log('No file selected');
+      // return;
+    // }
+
     console.log('Form data EDIT:', this.formDataUpdate);
     console.log('File data EDIT:', this.updatedFile);
     // return

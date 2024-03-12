@@ -185,11 +185,14 @@ app.post('/submit/question/update', upload.single('file-update'), async (req, re
     // console.log(req.file);
     // return
     const { id, question_update, note_update, type_update } = req.body;
-    const uniqueId = Math.random().toString(36).substr(2, 15);
-    const newFilename = `${uniqueId}.png`;
-    const imagePath = `assets/uploads/${newFilename}`;
 
+    let imagePath = null;
 
+    if (req.file) {
+      const uniqueId = Math.random().toString(36).substr(2, 15);
+      const newFilename = `${uniqueId}.png`;
+      const imagePath = `assets/uploads/${newFilename}`;
+    }
 
     const insertQuery = 'UPDATE questions SET question = ?, note = ?, type = ?, path = ? WHERE id = ?';
     const insertResult = await new Promise((resolve, reject) => {

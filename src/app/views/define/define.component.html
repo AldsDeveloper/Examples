@@ -203,7 +203,7 @@
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div class="col-span-2">
               <label for="question" class="block mb-2 text-sm font-medium text-gray-900">Question</label>
-              <textarea id="question" name="question" [(ngModel)]="formDataUpdate.question"  rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here"></textarea>
+              <textarea id="question" required #question="ngModel" name="question" [(ngModel)]="formDataUpdate.question"  rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-purple-500 focus:border-purple-500" placeholder="Write question here"></textarea>
               <p *ngIf="question.invalid && (question.dirty || question.touched)" class="block mb-2 ml-2 text-sm text-red-600">This field is required</p>
             </div>
             <div class="col-span-2">
