@@ -139,6 +139,7 @@ export class DefineComponent implements AfterViewInit {
     }
   }
 
+
   fetchAllQuestions() {
     this.http.get('http://localhost:3000/fetch/all/questions').subscribe((response: any) => {
       this.allQuestions = response;
@@ -151,8 +152,8 @@ export class DefineComponent implements AfterViewInit {
 
   get currentPageQuestions(): any[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.allQuestions.length - 1);
-    return this.allQuestions.slice(startIndex, endIndex + 1);
+    const endIndex = Math.min(startIndex + this.itemsPerPage, this.allQuestions.length);
+    return this.allQuestions.slice(startIndex, endIndex);
   }
 
   get currentIndexRange(): { start: number, last: number } {
@@ -164,6 +165,7 @@ export class DefineComponent implements AfterViewInit {
   get totalPages(): number {
     return Math.ceil(this.allQuestions.length / this.itemsPerPage);
   }
+
 
   openModal(modalId: string): void {
     const modal = document.getElementById(modalId);

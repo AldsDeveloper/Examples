@@ -154,11 +154,6 @@ app.post('/submit/answers', (req, res) => {
   });
 });
 
-
-
-
-
-
 app.post('/submit/question', upload.single('file'), async (req, res) => {
   const { question, note, type } = req.body;
   let imagePath = null;
