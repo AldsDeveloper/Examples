@@ -1,0 +1,17 @@
+<form class="form-container" #createForm="ngForm">
+  <div class="form-grid">
+    <div class="form-col">
+      <label for="question" class="question-label">Question</label>
+      <div class="question-wrapper">
+        <div id="question-container"></div>
+        <input id="question" name="question" [(ngModel)]="formData.question" (keyup.backspace)="deleteQuestion()" (keyup.enter)="addQuestion()" [placeholder]="!formData.question && !questions.length ? 'Write question here' : ''" required #question="ngModel">
+      </div>
+    </div>
+  </div>
+  <div class="btn-container">
+    <button class="btn-create">
+      <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+      CREATE
+    </button>
+  </div>
+</form>
