@@ -20,6 +20,7 @@ import { SignupComponent } from './views/auth/signup/signup.component';
 import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
 import { ResultComponent } from './views/result/result.component';
 import { InputComponent } from './views/input/input.component';
+import { ModelsComponent } from './models/models.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { InputComponent } from './views/input/input.component';
     SignupComponent,
     ResultComponent,
     InputComponent,
+    ModelsComponent,
   ],
   imports: [
     BrowserModule,
