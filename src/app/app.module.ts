@@ -37,7 +37,6 @@ import { ModelsComponent } from './models/models.component';
     SignupComponent,
     ResultComponent,
     InputComponent,
-    ModelsComponent,
   ],
   imports: [
     BrowserModule,
